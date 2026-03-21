@@ -1,0 +1,12 @@
+.skid {
+  position: absolute;
+  pointer-events: none;
+  font-size: 28px;
+  animation: skidFade 0.6s ease-out forwards;
+  z-index: 48;
+}
+
+@keyframes skidFade {
+  0%   { opacity: 1; transform: scale(1.5) rotate(-20deg); }
+  100% { opacity: 0; transform: scale(0.5) rotate(20deg) translateY(30px); }
+}
