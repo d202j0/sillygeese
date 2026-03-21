@@ -21,7 +21,7 @@
   50%     { opacity: 1;   transform: scale(1.3); }
 }
 
-/* Custom cursor */
+/* Custom cursor — hidden on touch/mobile */
 .cursor {
   position: fixed;
   width: 32px;
@@ -30,6 +30,11 @@
   z-index: 9999;
   font-size: 24px;
   transform: translate(-50%, -50%);
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .cursor { display: none; }
+  .game   { cursor: auto; }
 }
 
 /* Cursor trail */
@@ -86,27 +91,20 @@
   font-weight: bold;
 }
 
-/* Back button */
+/* Back button — sits inside HUD */
 .backBtn {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  z-index: 100;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
   font-family: 'Nunito', cursive;
-  background: rgba(255,255,255,0.2);
-  backdrop-filter: blur(8px);
-  padding: 8px 18px;
-  border-radius: 30px;
-  border: 2px solid rgba(255,255,255,0.3);
-  transition: all 0.2s;
+  background: rgba(255,255,255,0.15);
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.25);
+  transition: background 0.2s;
+  white-space: nowrap;
 }
 
-.backBtn:hover {
-  background: rgba(255,255,255,0.3);
-  transform: translateX(-2px);
-}
+.backBtn:hover { background: rgba(255,255,255,0.25); }
 
 /* Game area */
 .area {

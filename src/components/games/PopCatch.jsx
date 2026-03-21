@@ -375,20 +375,16 @@ export default function PopCatch({ config }) {
   return (
     <div className={styles.game} style={{ background: bgGradient }}>
 
-      {/* Custom cursor */}
+      {/* Custom cursor — hidden on touch devices via CSS */}
       <div ref={cursorRef} className={styles.cursor}>{trailEmojis[0]}</div>
 
       {/* HUD */}
       <div className={styles.hud}>
-        <div ref={hudScoreRef} className={styles.score}>{scoreEmoji} 0</div>
+        <Link to="/" className={styles.backBtn} style={{ color: accentColor }}>← Home</Link>
         <div ref={hudLevelRef} className={styles.levelBadge}>Level 1</div>
+        <div ref={hudScoreRef} className={styles.score}>{scoreEmoji} 0</div>
         <div ref={hudLivesRef} className={styles.lives}>{livesEmoji.repeat(3)}</div>
       </div>
-
-      {/* Back button */}
-      <Link to="/" className={styles.backBtn} style={{ color: accentColor }}>
-        ← Home
-      </Link>
 
       {/* Game area */}
       <div ref={areaRef} className={styles.area} />
