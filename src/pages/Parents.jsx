@@ -199,7 +199,18 @@ export default function Parents() {
 
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Privacy</h2>
-          <p className={styles.body}>Silly Geese collects zero data. No analytics, no cookies, no accounts, nothing. Your child's play stays entirely on their device. We built this for our own kids and decided to share it — there's no business model here.</p>
+          <p className={styles.body}>
+            Silly Geese does not require accounts, logins, or any personal information to play. There are no ads and no in-app purchases.
+          </p>
+          <p className={styles.body}>
+            We use <strong>Vercel Analytics</strong> to collect basic, anonymous usage data — things like which pages are visited and which country visitors are from. No personal information is collected and nothing is tied to an individual user.
+          </p>
+          <p className={styles.body}>
+            The <strong>feedback form</strong> on this page is entirely optional. If you submit it, your responses are sent to us via Formspree and stored securely. We don't ask for your name or email — only the answers you choose to give. We use this feedback solely to improve the games.
+          </p>
+          <p className={styles.body}>
+            Your child's gameplay stays entirely on their device. We don't track scores, progress, or anything that happens inside the games themselves.
+          </p>
         </section>
 
         <section className={styles.section}>
