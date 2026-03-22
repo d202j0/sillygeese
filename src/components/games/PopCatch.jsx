@@ -117,12 +117,25 @@ function createAudio() {
 }
 
 // ─── Phase config ─────────────────────────────────────
-const PHASES = [
+const isTouch = window.matchMedia('(pointer: coarse)').matches
+
+const PHASES_TOUCH = [
   { minLevel:1,  maxLevel:3,  showLabel:false, icon:'🎮', title:'Tap everything!',    desc:'Tap every bubble before it flies away!',                  bubbleSize:[100,135], speedBase:2.5, spawnMs:700 },
   { minLevel:4,  maxLevel:6,  showLabel:true,  icon:'🔤', title:'Letters & Numbers!', desc:'The bubbles now show letters and numbers — tap them all!', bubbleSize:[95,125],  speedBase:2.1, spawnMs:600 },
   { minLevel:7,  maxLevel:9,  showLabel:true,  icon:'🌈', title:'Getting faster!',    desc:'Quicker bubbles! Tap every single one!',                  bubbleSize:[85,112],  speedBase:1.7, spawnMs:500 },
   { minLevel:10, maxLevel:99, showLabel:true,  icon:'⭐', title:'Super star mode!',   desc:"Really fast now — you're amazing!",                       bubbleSize:[75,105],  speedBase:1.3, spawnMs:380 },
 ]
+
+const PHASES_MOUSE = [
+  { minLevel:1,  maxLevel:3,  showLabel:false, icon:'🎮', title:'Tap everything!',    desc:'Click the bubbles before they fly away!',                  bubbleSize:[120,160], speedBase:4.5, spawnMs:1200 },
+  { minLevel:4,  maxLevel:6,  showLabel:true,  icon:'🔤', title:'Letters & Numbers!', desc:'The bubbles now show letters and numbers — click them all!', bubbleSize:[110,145], speedBase:3.8, spawnMs:1050 },
+  { minLevel:7,  maxLevel:9,  showLabel:true,  icon:'🌈', title:'Getting faster!',    desc:'Quicker bubbles! Click every single one!',                  bubbleSize:[100,130], speedBase:3.0, spawnMs:900  },
+  { minLevel:10, maxLevel:99, showLabel:true,  icon:'⭐', title:'Super star mode!',   desc:"Really fast now — you're amazing!",                        bubbleSize:[90,120],  speedBase:2.2, spawnMs:750  },
+]
+
+const PHASES = isTouch ? PHASES_TOUCH : PHASES_MOUSE
+const INITIAL_SPEED    = isTouch ? 2.5 : 4.5
+const INITIAL_SPAWN_MS = isTouch ? 700 : 1200
 
 function getPhase(level) {
   return PHASES.find(p => level >= p.minLevel && level <= p.maxLevel) || PHASES[PHASES.length-1]
@@ -166,7 +179,7 @@ function Game({ themeKey, onSwitchTheme }) {
   const { bgGradient, accentColor, scoreEmoji, livesEmoji, trailEmojis, emojis, popBursts, colors, learnPool = DEFAULT_LEARN_POOL, extraEffects } = config
 
   const areaRef       = useRef(null)
-  const stateRef      = useRef({ score:0, lives:3, level:1, floatSpeed:2.5, spawnInterval:700, running:false, spawnTimer:null })
+  const stateRef      = useRef({ score:0, lives:3, level:1, floatSpeed:INITIAL_SPEED, spawnInterval:INITIAL_SPAWN_MS, running:false, spawnTimer:null })
   const audioRef      = useRef(null)
   const cursorRef     = useRef(null)
   const lastTrailRef  = useRef(0)
@@ -301,8 +314,8 @@ function Game({ themeKey, onSwitchTheme }) {
     if (s.score > 0 && s.score % 10 === 0) {
       s.level++
       const newPD = getPhase(s.level), oldPD = getPhase(s.level-1)
-      s.floatSpeed    = Math.max(1.3, newPD.speedBase)
-      s.spawnInterval = Math.max(380, newPD.spawnMs)
+      s.floatSpeed    = Math.max(isTouch ? 1.3 : 2.2, newPD.speedBase)
+      s.spawnInterval = Math.max(isTouch ? 380 : 750, newPD.spawnMs)
       audioRef.current?.levelUp()
       if (newPD.minLevel !== oldPD.minLevel) {
         s.running = false; clearTimeout(s.spawnTimer)
@@ -335,7 +348,7 @@ function Game({ themeKey, onSwitchTheme }) {
       setTimeout(() => showMsg(`Game over!\n${scoreEmoji} ${fs} popped!`), 200)
       setTimeout(() => {
         document.querySelectorAll(`.${styles.bubble}`).forEach(b => b.remove())
-        s.score=0; s.lives=3; s.level=1; s.floatSpeed=2.5; s.spawnInterval=700; s.running=true
+        s.score=0; s.lives=3; s.level=1; s.floatSpeed=INITIAL_SPEED; s.spawnInterval=INITIAL_SPAWN_MS; s.running=true
         updateHUD(); restartSpawner()
         setTimeout(spawnBubble, 400); setTimeout(spawnBubble, 900)
       }, 3200)
