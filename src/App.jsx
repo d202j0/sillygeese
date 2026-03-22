@@ -4,15 +4,17 @@ import Parents from './pages/Parents'
 import PopPurple from './pages/games/PopPurple'
 import PopBlue from './pages/games/PopBlue'
 import PopPink from './pages/games/PopPink'
+import MemoryFlipPage from './pages/games/MemoryFlipPage'
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/"                element={<Home />} />
-      <Route path="/parents"         element={<Parents />} />
-      <Route path="/play/pop-purple" element={<PopPurple />} />
-      <Route path="/play/pop-blue"   element={<PopBlue />} />
-      <Route path="/play/pop-pink"   element={<PopPink />} />
+      <Route path="/"                  element={<Home />} />
+      <Route path="/parents"           element={<Parents />} />
+      <Route path="/play/pop-purple"   element={<PopPurple />} />
+      <Route path="/play/pop-blue"     element={<PopBlue />} />
+      <Route path="/play/pop-pink"     element={<PopPink />} />
+      <Route path="/play/memory-flip"  element={<MemoryFlipPage />} />
     </Routes>
   )
 }
