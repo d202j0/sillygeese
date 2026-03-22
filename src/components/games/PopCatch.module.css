@@ -142,9 +142,9 @@
 
 @keyframes floatUp {
   0%   { opacity: 0;   transform: translateY(0) scale(0.4) rotate(-5deg); }
-  8%   { opacity: 1;   transform: translateY(-5vh) scale(1) rotate(3deg); }
-  92%  { opacity: 1;   transform: translateY(-88vh) scale(1) rotate(-3deg); }
-  100% { opacity: 0;   transform: translateY(-100vh) scale(0.6) rotate(5deg); }
+  8%   { opacity: 1;   transform: translateY(-40px) scale(1) rotate(3deg); }
+  92%  { opacity: 1;   transform: translateY(calc(var(--travel, 100vh) * -1)) scale(1) rotate(-3deg); }
+  100% { opacity: 0;   transform: translateY(calc(var(--travel, 100vh) * -1.1)) scale(0.6) rotate(5deg); }
 }
 
 /* Pop burst */

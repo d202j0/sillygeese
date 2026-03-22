@@ -184,21 +184,26 @@ export default function PopCatch({ config }) {
     const area = areaRef.current; if (!area) return
     const pd    = getPhase(s.level)
     const areaW = area.offsetWidth
+    const areaH = area.offsetHeight
     const [minSz, maxSz] = pd.bubbleSize
     const size  = minSz + Math.random() * (maxSz - minSz)
     const x     = 10 + Math.random() * (areaW - size - 20)
-    const dur   = s.floatSpeed + Math.random() * 2
+    const dur   = s.floatSpeed + Math.random() * 1
     const colorPair = colors[Math.floor(Math.random() * colors.length)]
     const emoji = emojis[Math.floor(Math.random() * emojis.length)]
     const label = pd.showLabel ? learnPool[Math.floor(Math.random() * learnPool.length)] : ''
 
+    // Start anywhere in the lower half of the game area
+    const startY = areaH * 0.5 + Math.random() * areaH * 0.5
+
     const b = document.createElement('div')
     b.className = styles.bubble
     b.style.cssText = `
-      width:${size}px; height:${size}px; left:${x}px; bottom:-${size + 20}px;
+      width:${size}px; height:${size}px; left:${x}px; top:${startY}px;
       background: radial-gradient(circle at 32% 32%, ${colorPair[0]}, ${colorPair[1]});
       box-shadow: inset -5px -5px 14px rgba(0,0,0,0.18), inset 5px 5px 14px rgba(255,255,255,0.28), 0 0 20px ${colorPair[0]}99;
       animation-duration: ${dur}s;
+      --travel: ${startY + size + 20}px;
     `
 
     const emojiEl = document.createElement('div')
