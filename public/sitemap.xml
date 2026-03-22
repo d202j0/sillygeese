@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://sillygeese.fun/</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://sillygeese.fun/parents</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sillygeese.fun/play/pop</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sillygeese.fun/play/memory-flip</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sillygeese.fun/play/simple-simon</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sillygeese.fun/play/colour-match</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sillygeese.fun/play/counting-catch</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sillygeese.fun/play/alphabet-tap</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sillygeese.fun/play/bubble-burst</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sillygeese.fun/play/shape-sorter</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sillygeese.fun/play/piano</loc><priority>0.7</priority><changefreq>monthly</changefreq></url>
+</urlset>
