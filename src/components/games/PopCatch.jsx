@@ -56,10 +56,10 @@ function createAudio() {
 
 // ─── Phase config ─────────────────────────────────────
 const PHASES = [
-  { minLevel:1,  maxLevel:3,  showLabel:false, icon:'🎮', title:'Tap everything!',     desc:'Tap every bubble before it flies away!',                  bubbleSize:[100,135], speedBase:4.0, spawnMs:1200 },
-  { minLevel:4,  maxLevel:6,  showLabel:true,  icon:'🔤', title:'Letters & Numbers!',  desc:'The bubbles now show letters and numbers — tap them all!', bubbleSize:[95,125],  speedBase:3.4, spawnMs:1050 },
-  { minLevel:7,  maxLevel:9,  showLabel:true,  icon:'🌈', title:'Getting faster!',     desc:'Quicker bubbles! Tap every single one!',                  bubbleSize:[85,112],  speedBase:2.8, spawnMs:900  },
-  { minLevel:10, maxLevel:99, showLabel:true,  icon:'⭐', title:'Super star mode!',    desc:"Really fast now — you're amazing!",                       bubbleSize:[75,105],  speedBase:2.2, spawnMs:700  },
+  { minLevel:1,  maxLevel:3,  showLabel:false, icon:'🎮', title:'Tap everything!',     desc:'Tap every bubble before it flies away!',                  bubbleSize:[100,135], speedBase:2.5, spawnMs:700  },
+  { minLevel:4,  maxLevel:6,  showLabel:true,  icon:'🔤', title:'Letters & Numbers!',  desc:'The bubbles now show letters and numbers — tap them all!', bubbleSize:[95,125],  speedBase:2.1, spawnMs:600  },
+  { minLevel:7,  maxLevel:9,  showLabel:true,  icon:'🌈', title:'Getting faster!',     desc:'Quicker bubbles! Tap every single one!',                  bubbleSize:[85,112],  speedBase:1.7, spawnMs:500  },
+  { minLevel:10, maxLevel:99, showLabel:true,  icon:'⭐', title:'Super star mode!',    desc:"Really fast now — you're amazing!",                       bubbleSize:[75,105],  speedBase:1.3, spawnMs:380  },
 ]
 
 function getPhase(level) {
@@ -88,7 +88,7 @@ export default function PopCatch({ config }) {
   const areaRef       = useRef(null)
   const stateRef      = useRef({
     score: 0, lives: 3, level: 1,
-    floatSpeed: 4.0, spawnInterval: 1200,
+    floatSpeed: 2.5, spawnInterval: 700,
     running: false, spawnTimer: null,
   })
   const audioRef      = useRef(null)
@@ -287,7 +287,7 @@ export default function PopCatch({ config }) {
     const s = stateRef.current
     document.querySelectorAll(`.${styles.bubble}`).forEach(b => b.remove())
     s.score = 0; s.lives = 3; s.level = 1
-    s.floatSpeed = 4.0; s.spawnInterval = 1200
+    s.floatSpeed = 2.5; s.spawnInterval = 700
     s.running = true
     updateHUD()
     restartSpawner()
