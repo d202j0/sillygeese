@@ -3,6 +3,7 @@ import Home from './pages/Home'
 import Parents from './pages/Parents'
 import PopCatchPage from './pages/games/PopCatchPage'
 import MemoryFlipPage from './pages/games/MemoryFlipPage'
+import PianoPage from './pages/games/PianoPage'
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
       <Route path="/parents"          element={<Parents />} />
       <Route path="/play/pop"         element={<PopCatchPage />} />
       <Route path="/play/memory-flip" element={<MemoryFlipPage />} />
+      <Route path="/play/piano"       element={<PianoPage />} />
     </Routes>
   )
 }

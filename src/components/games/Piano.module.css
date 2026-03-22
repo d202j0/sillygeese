@@ -1,0 +1,451 @@
+.setup {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive;
+  overflow-y: auto;
+  background: linear-gradient(160deg, #0a0015 0%, #1a0530 50%, #0d1a40 100%);
+}
+
+.setupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+.setupBack {
+  font-size: 14px;
+  font-weight: 800;
+  font-family: 'Nunito', cursive;
+  color: #c77dff;
+  background: rgba(255,255,255,0.1);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.setupBack:hover { background: rgba(255,255,255,0.2); }
+
+.setupTitle {
+  font-family: 'Fredoka', cursive;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.setupBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 32px 20px 40px;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.setupEmoji {
+  font-size: 72px;
+  animation: pianoFloat 2s ease-in-out infinite;
+}
+
+@keyframes pianoFloat {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-10px); }
+}
+
+.setupHeading {
+  font-family: 'Fredoka', cursive;
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+}
+
+.setupSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.setupLabel {
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  text-align: center;
+}
+
+.setupBtnRow {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.setupBtn {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.setupBtn:hover { background: rgba(255,255,255,0.18); }
+.setupBtnActive {
+  background: #7b2fff !important;
+  border-color: #c77dff !important;
+  color: #fff !important;
+  box-shadow: 0 0 20px #7b2fff88;
+}
+
+.songGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.songBtn {
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 12px;
+  border-radius: 16px;
+  border: 2px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.07);
+  cursor: pointer;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.songBtn:hover { background: rgba(255,255,255,0.14); transform: translateY(-2px); }
+.songBtnActive {
+  background: rgba(123,47,255,0.4) !important;
+  border-color: #c77dff !important;
+  box-shadow: 0 0 16px #7b2fff66;
+}
+
+.songEmoji { font-size: 28px; }
+.songTitle { font-size: 13px; font-weight: 700; color: #fff; text-align: center; }
+
+.startBtn {
+  font-family: inherit;
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, #7b2fff, #c77dff);
+  border: none;
+  border-radius: 50px;
+  padding: 16px 40px;
+  cursor: pointer;
+  box-shadow: 0 4px 24px #7b2fff88;
+  transition: transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.startBtn:active { transform: scale(0.96); }
+
+/* ─── Game layout ──────────────────────────────────── */
+.game {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #0a0015 0%, #1a0530 60%, #0d0820 100%);
+  font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+  overflow: hidden;
+}
+
+/* HUD */
+.hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+  gap: 8px;
+  z-index: 10;
+}
+
+.hudBtn {
+  font-family: 'Nunito', cursive;
+  font-size: 14px;
+  font-weight: 800;
+  color: #c77dff;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 6px 14px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hudCenter { flex: 1; text-align: center; }
+
+.hudSong {
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+}
+
+.hudScore {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 80px;
+  justify-content: flex-end;
+}
+
+.scoreNum {
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffd93d;
+}
+
+.combo {
+  font-size: 16px;
+  font-weight: 800;
+  color: #ff6b6b;
+  animation: comboPulse 0.3s ease-out;
+}
+
+@keyframes comboPulse {
+  0%   { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+/* Falling notes area */
+.fallingArea {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Lane guide */
+.lane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Hit zone — glowing line at the bottom of the falling area */
+.hitZone {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, transparent, #ffd93d, #ff9f43, #ffd93d, transparent);
+  box-shadow: 0 0 16px #ffd93d, 0 0 32px #ff9f4388;
+  animation: hitZonePulse 1.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 6;
+}
+
+@keyframes hitZonePulse {
+  0%,100% { opacity: 0.8; box-shadow: 0 0 12px #ffd93d, 0 0 24px #ff9f4366; }
+  50%     { opacity: 1;   box-shadow: 0 0 20px #ffd93d, 0 0 40px #ff9f4388; }
+}
+
+/* Lane lines */
+.fallingArea::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,0.03) 0px,
+    rgba(255,255,255,0.03) 1px,
+    transparent 1px,
+    transparent calc(100% / var(--lane-count, 8))
+  );
+  pointer-events: none;
+}
+
+/* Falling note */
+.fallingNote {
+  position: absolute;
+  top: -60px;
+  border-radius: 12px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: notefall linear forwards;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.3);
+  border: 2px solid rgba(255,255,255,0.3);
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.1s;
+  z-index: 5;
+}
+
+@keyframes notefall {
+  from { transform: translateY(0); }
+  to   { transform: translateY(var(--travel, 600px)); }
+}
+
+.fallingNoteLabel {
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  pointer-events: none;
+}
+
+/* Hit message */
+.hitMsg {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 36px;
+  font-weight: 800;
+  text-shadow: 0 0 20px currentColor;
+  pointer-events: none;
+  animation: hitMsgPop 0.9s ease-out forwards;
+  z-index: 20;
+  white-space: nowrap;
+}
+
+@keyframes hitMsgPop {
+  0%   { transform: translate(-50%,-50%) scale(0.5); opacity: 1; }
+  30%  { transform: translate(-50%,-50%) scale(1.2); opacity: 1; }
+  100% { transform: translate(-50%,-80%) scale(1); opacity: 0; }
+}
+
+/* Song done overlay */
+.songDoneOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+}
+
+.songDoneBox {
+  background: #fff;
+  border-radius: 28px;
+  padding: 36px 32px;
+  text-align: center;
+  max-width: 340px;
+  width: 90%;
+  animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes popIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.songDoneEmoji { font-size: 56px; }
+.songDoneTitle { font-family: 'Fredoka', cursive; font-size: 32px; font-weight: 700; color: #1a1a2e; margin: 8px 0 4px; }
+.songDoneSub   { font-size: 16px; color: #666; font-weight: 600; margin-bottom: 4px; font-family: 'Nunito', cursive; }
+.songDoneScore { font-size: 22px; color: #7b2fff; font-weight: 800; margin-bottom: 20px; font-family: 'Fredoka', cursive; }
+
+.songDoneBtns { display: flex; flex-direction: column; gap: 10px; }
+
+.songDoneBtn {
+  font-family: 'Fredoka', cursive;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 13px 24px;
+  cursor: pointer;
+  transition: filter 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.songDoneBtn:hover { filter: brightness(1.1); }
+
+/* ─── Piano keys ──────────────────────────────────── */
+.piano {
+  flex-shrink: 0;
+  background: #1a0a00;
+  padding: 8px 8px 12px;
+  border-top: 3px solid rgba(255,255,255,0.1);
+  z-index: 10;
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: repeat(var(--white-count), 1fr);
+  gap: 3px;
+  height: clamp(80px, 18vh, 130px);
+  position: relative;
+}
+
+.key {
+  border-radius: 0 0 10px 10px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: filter 0.08s, transform 0.08s;
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.3);
+}
+
+.keyWhite {
+  background: linear-gradient(180deg, #f5f5f0 0%, #ffffff 100%);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(0,0,0,0.1);
+  z-index: 1;
+}
+
+.keyBlack {
+  background: linear-gradient(180deg, #222 0%, #000 100%);
+  height: 60%;
+  margin: 0 -15%;
+  z-index: 2;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 -2px 4px rgba(255,255,255,0.05);
+  border-radius: 0 0 6px 6px;
+}
+
+.keyPressed {
+  filter: brightness(0.8);
+  transform: translateY(2px);
+}
+
+.keyGlowing {
+  filter: brightness(1.3) saturate(1.5);
+}
+
+.keyLabel {
+  font-size: clamp(8px, 1.5vw, 13px);
+  font-weight: 700;
+  color: rgba(0,0,0,0.4);
+  pointer-events: none;
+  font-family: 'Nunito', cursive;
+}
+
+.keyBlack .keyLabel { color: rgba(255,255,255,0.3); }
+.keyGlowing.keyWhite .keyLabel { color: rgba(0,0,0,0.7); }
+
+@media (max-width: 480px) {
+  .songGrid { grid-template-columns: repeat(2, 1fr); }
+  .keys { height: clamp(70px, 15vh, 100px); }
+}
