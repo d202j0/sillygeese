@@ -1,0 +1,68 @@
+.picker {
+  min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;
+  font-family:'Comic Sans MS','Chalkboard SE','Marker Felt',cursive;
+  background:linear-gradient(160deg,#0d0020 0%,#1a0535 50%,#0a1a40 100%);
+}
+.pickerHeader{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(255,255,255,0.1);}
+.pickerBack{font-size:14px;font-weight:800;font-family:'Nunito',cursive;color:#c77dff;background:rgba(255,255,255,0.1);padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.2);text-decoration:none;transition:background 0.2s;}
+.pickerBack:hover{background:rgba(255,255,255,0.2);}
+.pickerTitle{font-family:'Fredoka',cursive;font-size:24px;font-weight:700;color:#fff;}
+.pickerBody{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:40px 24px;}
+.pickerEmoji{font-size:80px;animation:bob 2s ease-in-out infinite;}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-14px) rotate(5deg);}}
+.pickerHeading{font-family:'Fredoka',cursive;font-size:36px;font-weight:700;color:#fff;}
+.pickerSub{font-size:17px;color:rgba(255,255,255,0.7);font-weight:600;text-align:center;max-width:340px;}
+.themeGrid{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;}
+.themeBtn{font-family:inherit;border:none;border-radius:24px;padding:24px 28px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform 0.15s;-webkit-tap-highlight-color:transparent;min-width:120px;}
+.themeBtn:hover{transform:translateY(-4px) scale(1.04);}
+.themeBtn:active{transform:scale(0.96);}
+.themeBtnEmoji{font-size:48px;}
+.themeBtnLabel{font-size:18px;font-weight:800;color:#fff;}
+
+.game{position:fixed;inset:0;display:flex;flex-direction:column;font-family:'Comic Sans MS','Chalkboard SE','Marker Felt',cursive;overflow:hidden;cursor:none;}
+.cursor{position:fixed;width:32px;height:32px;pointer-events:none;z-index:9999;font-size:22px;transform:translate(-50%,-50%);}
+@media(hover:none)and(pointer:coarse){.cursor{display:none;}.game{cursor:auto;}}
+.trail{position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);animation:trailFade 0.5s ease-out forwards;}
+@keyframes trailFade{0%{opacity:0.8;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(0.2);}}
+
+.hud{position:relative;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:8px 16px;gap:8px;background:rgba(0,0,0,0.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.1);flex-shrink:0;}
+.backBtn{font-size:14px;font-weight:800;font-family:'Nunito',cursive;background:rgba(255,255,255,0.12);padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.2);text-decoration:none;white-space:nowrap;transition:background 0.2s;}
+.backBtn:hover{background:rgba(255,255,255,0.22);}
+.levelBadge{font-size:15px;font-weight:800;color:rgba(255,255,255,0.9);background:rgba(255,255,255,0.12);padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.2);white-space:nowrap;}
+.score{font-size:22px;font-weight:800;color:#fff;text-shadow:0 0 12px rgba(255,255,255,0.4);}
+.lives{font-size:20px;letter-spacing:2px;}
+.switchBtn{font-family:'Nunito',cursive;font-size:13px;font-weight:800;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:5px 12px;cursor:pointer;white-space:nowrap;transition:background 0.2s;-webkit-tap-highlight-color:transparent;}
+.switchBtn:hover{background:rgba(255,255,255,0.22);}
+
+.targetBanner{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 20px;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;}
+.targetLabel{font-size:20px;font-weight:700;color:rgba(255,255,255,0.85);}
+.targetLetter{font-family:'Fredoka',cursive;font-size:52px;font-weight:700;line-height:1;animation:letterPulse 1s ease-in-out infinite;}
+@keyframes letterPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
+
+.area{flex:1;position:relative;overflow:hidden;}
+
+.bubble{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:none;animation:floatUp linear forwards;user-select:none;touch-action:manipulation;will-change:transform;}
+.bubble:active{transform:scale(0.88)!important;}
+.bubbleLetter{pointer-events:none;font-weight:900;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.4);line-height:1;font-family:'Fredoka',cursive;}
+
+@keyframes floatUp{
+  0%{opacity:0;transform:translateY(0) scale(0.4) rotate(-5deg);}
+  8%{opacity:1;transform:translateY(-40px) scale(1) rotate(3deg);}
+  92%{opacity:1;transform:translateY(calc(var(--travel,100vh)*-1)) scale(1) rotate(-3deg);}
+  100%{opacity:0;transform:translateY(calc(var(--travel,100vh)*-1.05)) scale(0.6) rotate(5deg);}
+}
+
+.burst{position:absolute;pointer-events:none;animation:burst 0.5s ease-out forwards;z-index:50;}
+@keyframes burst{0%{transform:scale(0.4);opacity:1;}50%{transform:scale(2);opacity:0.9;}100%{transform:scale(3);opacity:0;}}
+.confetti{position:absolute;pointer-events:none;width:10px;height:10px;border-radius:2px;animation:confettiFall 0.8s ease-out forwards;z-index:49;}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1;}100%{transform:translateY(80px) rotate(360deg) scale(0.3);opacity:0;}}
+
+.msg{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:44px;color:#fff;text-shadow:0 0 20px rgba(255,255,255,0.6);z-index:200;text-align:center;font-weight:bold;pointer-events:none;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),opacity 0.35s;opacity:0;white-space:pre-line;line-height:1.3;}
+
+.phase{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);z-index:250;gap:16px;opacity:0;pointer-events:none;transition:opacity 0.4s;}
+.phaseVisible{opacity:1;pointer-events:all;}
+.phaseIcon{font-size:72px;}
+.phaseTitle{font-family:'Fredoka',cursive;font-size:40px;font-weight:700;color:#fff;text-align:center;}
+.phaseDesc{font-size:20px;color:rgba(255,255,255,0.85);text-align:center;padding:0 32px;font-weight:600;max-width:400px;}
+.phaseBtn{font-family:inherit;font-size:26px;font-weight:bold;color:#fff;border:none;border-radius:50px;padding:14px 44px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform 0.1s;}
+.phaseBtn:active{transform:scale(0.94);}

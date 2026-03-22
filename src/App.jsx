@@ -7,6 +7,9 @@ import PianoPage from './pages/games/PianoPage'
 import SimpleSimonPage from './pages/games/SimpleSimonPage'
 import ColourMatchPage from './pages/games/ColourMatchPage'
 import CountingCatchPage from './pages/games/CountingCatchPage'
+import AlphabetTapPage from './pages/games/AlphabetTapPage'
+import BubbleBurstPage from './pages/games/BubbleBurstPage'
+import ShapeSorterPage from './pages/games/ShapeSorterPage'
 
 export default function App() {
   return (
@@ -19,6 +22,9 @@ export default function App() {
       <Route path="/play/simple-simon"   element={<SimpleSimonPage />} />
       <Route path="/play/colour-match"   element={<ColourMatchPage />} />
       <Route path="/play/counting-catch" element={<CountingCatchPage />} />
+      <Route path="/play/alphabet-tap"   element={<AlphabetTapPage />} />
+      <Route path="/play/bubble-burst"   element={<BubbleBurstPage />} />
+      <Route path="/play/shape-sorter"   element={<ShapeSorterPage />} />
     </Routes>
   )
 }
