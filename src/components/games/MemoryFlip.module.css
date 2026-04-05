@@ -307,3 +307,104 @@
   .themeGrid { gap: 12px; }
   .themeBtn { min-width: 100px; padding: 18px 20px; }
 }
+/* ─── Cards theme additions ─────────────────────────── */
+
+/* Green baize texture overlay */
+.baize {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.015) 0px,
+      rgba(255,255,255,0.015) 1px,
+      transparent 1px,
+      transparent 8px
+    );
+}
+
+/* Playing card wrapper — portrait aspect ratio */
+.cardWrapPlaying {
+  aspect-ratio: 2 / 3 !important;
+}
+
+/* Card back pattern */
+.cardBackPattern {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.06) 0px,
+      rgba(255,255,255,0.06) 2px,
+      transparent 2px,
+      transparent 8px
+    );
+  border-radius: 8px;
+}
+
+.cardBackInner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  opacity: 0.5;
+}
+
+.cardBackSuit {
+  font-size: clamp(10px, 2.5vw, 18px);
+  color: #fff;
+  text-align: center;
+}
+
+/* Playing card face */
+.playingCard {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.playingCardCorner {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.playingCardCornerBR {
+  top: auto;
+  left: auto;
+  bottom: 4px;
+  right: 6px;
+  transform: rotate(180deg);
+}
+
+.playingCardRank {
+  font-size: clamp(10px, 2.5vw, 18px);
+  font-weight: 900;
+  font-family: 'Georgia', serif;
+  line-height: 1;
+}
+
+.playingCardSuit {
+  font-size: clamp(8px, 2vw, 14px);
+  line-height: 1;
+}
+
+.playingCardCenter {
+  font-size: clamp(22px, 6vw, 48px);
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+}
