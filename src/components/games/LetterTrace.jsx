@@ -1,10 +1,9 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './LetterTrace.module.css'
 
 // ─── Letter path data ─────────────────────────────────
-// All paths in a 200×260 SVG viewBox. Each entry is an array of
-// SVG path `d` strings — one per stroke, in stroke order.
+// All paths in a 200×260 SVG viewBox.
 const LETTERS = {
   A: { strokes: ['M 100,22 L 22,238', 'M 100,22 L 178,238', 'M 50,158 L 150,158'] },
   B: { strokes: ['M 45,22 L 45,238', 'M 45,22 C 160,22 160,128 45,128 C 165,128 165,238 45,238'] },
@@ -35,20 +34,11 @@ const LETTERS = {
 }
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
-
-const PALETTE = [
-  '#ff6b6b', '#ff9f43', '#ffd93d', '#6bcb77',
-  '#4d96ff', '#c77dff', '#ff6eb4', '#44ddcc',
-]
-
+const PALETTE  = ['#ff6b6b','#ff9f43','#ffd93d','#6bcb77','#4d96ff','#c77dff','#ff6eb4','#44ddcc']
 const getColor = (idx) => PALETTE[idx % PALETTE.length]
+const DURATION  = 5000  // ms
 
 // ─── Helpers ──────────────────────────────────────────
-function getStartPoint(pathD) {
-  const m = pathD.match(/M\s*([-\d.]+)[,\s]+([-\d.]+)/)
-  return m ? { x: parseFloat(m[1]), y: parseFloat(m[2]) } : { x: 0, y: 0 }
-}
-
 function screenToSVG(svgEl, clientX, clientY) {
   const pt = svgEl.createSVGPoint()
   pt.x = clientX
@@ -57,7 +47,7 @@ function screenToSVG(svgEl, clientX, clientY) {
 }
 
 function calcAccuracy(svgEl, trailPts) {
-  if (trailPts.length < 3) return 0
+  if (trailPts.length < 2) return 0
   const TOLERANCE_SQ = 26 * 26
   const pathEls = [...svgEl.querySelectorAll('[data-trace]')]
   if (!pathEls.length) return 0
@@ -83,43 +73,50 @@ function getStars(acc) {
 }
 
 // ─── Tracing SVG ──────────────────────────────────────
-function TracingSVG({ strokes, color, onFinish }) {
-  const svgRef     = useRef(null)
-  const trailElRef = useRef(null)
-  const trailPts   = useRef([])
-  const drawing    = useRef(false)
+// Accumulates trail across multiple finger strokes.
+// Exposes finish() via ref so the parent timer can trigger scoring.
+const TracingSVG = forwardRef(function TracingSVG({ strokes, color }, ref) {
+  const svgRef      = useRef(null)
+  const trailElRef  = useRef(null)
+  const segments    = useRef([])   // array of arrays of {x,y}
+  const isDown      = useRef(false)
 
-  function pushPoint(clientX, clientY) {
-    const pt = screenToSVG(svgRef.current, clientX, clientY)
-    trailPts.current.push(pt)
-    if (trailElRef.current) {
-      trailElRef.current.setAttribute(
-        'points',
-        trailPts.current.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')
-      )
+  useImperativeHandle(ref, () => ({
+    finish() {
+      const allPts = segments.current.flat()
+      return getStars(calcAccuracy(svgRef.current, allPts))
     }
+  }))
+
+  function buildPathD() {
+    return segments.current
+      .filter(seg => seg.length > 0)
+      .map(seg =>
+        `M ${seg[0].x.toFixed(1)},${seg[0].y.toFixed(1)}` +
+        seg.slice(1).map(p => ` L ${p.x.toFixed(1)},${p.y.toFixed(1)}`).join('')
+      )
+      .join(' ')
   }
 
   const onDown = useCallback((e) => {
     e.preventDefault()
-    drawing.current = true
-    trailPts.current = []
-    pushPoint(e.clientX, e.clientY)
+    isDown.current = true
+    const pt = screenToSVG(svgRef.current, e.clientX, e.clientY)
+    segments.current = [...segments.current, [pt]]
+    if (trailElRef.current) trailElRef.current.setAttribute('d', buildPathD())
   }, [])
 
   const onMove = useCallback((e) => {
-    if (!drawing.current) return
+    if (!isDown.current) return
     e.preventDefault()
-    pushPoint(e.clientX, e.clientY)
+    const pt = screenToSVG(svgRef.current, e.clientX, e.clientY)
+    segments.current[segments.current.length - 1].push(pt)
+    if (trailElRef.current) trailElRef.current.setAttribute('d', buildPathD())
   }, [])
 
   const onUp = useCallback(() => {
-    if (!drawing.current) return
-    drawing.current = false
-    if (trailPts.current.length < 3) return
-    const acc   = calcAccuracy(svgRef.current, trailPts.current)
-    onFinish(getStars(acc))
-  }, [onFinish])
+    isDown.current = false
+  }, [])
 
   return (
     <svg
@@ -131,7 +128,7 @@ function TracingSVG({ strokes, color, onFinish }) {
       onPointerUp={onUp}
       onPointerLeave={onUp}
     >
-      {/* Ghost base — very faint solid so overall shape is readable */}
+      {/* Ghost base — very faint solid so the overall shape is readable */}
       {strokes.map((d, i) => (
         <path key={`g${i}`} d={d} fill="none"
           stroke={color} strokeWidth="22" strokeLinecap="round" strokeLinejoin="round"
@@ -145,46 +142,55 @@ function TracingSVG({ strokes, color, onFinish }) {
           strokeDasharray="22 13" opacity="0.50" />
       ))}
 
-      {/* Numbered start dots — one per stroke */}
-      {strokes.map((d, i) => {
-        const { x, y } = getStartPoint(d)
-        return (
-          <g key={`s${i}`}>
-            <circle cx={x} cy={y} r={15} fill={color} opacity={0.95} />
-            <text x={x} y={y + 5.5} textAnchor="middle" fill="white"
-              fontSize={15} fontWeight="bold"
-              style={{ pointerEvents: 'none', fontFamily: 'Nunito, sans-serif' }}>
-              {i + 1}
-            </text>
-          </g>
-        )
-      })}
-
-      {/* Finger trail */}
-      <polyline ref={trailElRef} points="" fill="none"
+      {/* Multi-stroke trail — updated imperatively, uses M to jump between strokes */}
+      <path ref={trailElRef} d="" fill="none"
         stroke={color} strokeWidth="24" strokeLinecap="round" strokeLinejoin="round"
         opacity="0.88" />
     </svg>
   )
-}
+})
 
 // ─── Root ─────────────────────────────────────────────
 export default function LetterTrace() {
-  const [letterIdx, setLetterIdx] = useState(0)
-  const [phase,     setPhase]     = useState('trace')  // 'trace' | 'result' | 'done'
-  const [stars,     setStars]     = useState(0)
-  const [trailKey,  setTrailKey]  = useState(0)
+  const [letterIdx,  setLetterIdx]  = useState(0)
+  const [phase,      setPhase]      = useState('trace')  // 'trace' | 'result' | 'done'
+  const [stars,      setStars]      = useState(0)
+  const [trailKey,   setTrailKey]   = useState(0)
+  const [timerFrac,  setTimerFrac]  = useState(1)        // 1 = full, 0 = empty
+
+  const tracingRef = useRef(null)
 
   const letter = ALPHABET[letterIdx]
   const color  = getColor(letterIdx)
   const data   = LETTERS[letter]
 
-  const handleFinish = useCallback((s) => {
-    setStars(s)
-    setPhase('result')
-  }, [])
+  // 5-second countdown — starts fresh whenever a new trace begins (trailKey change)
+  useEffect(() => {
+    if (phase !== 'trace') return
+
+    const start = Date.now()
+    let fired = false
+
+    const id = setInterval(() => {
+      if (fired) return
+      const elapsed = Date.now() - start
+      const frac = Math.max(0, 1 - elapsed / DURATION)
+      setTimerFrac(frac)
+
+      if (elapsed >= DURATION) {
+        fired = true
+        clearInterval(id)
+        const s = tracingRef.current?.finish() ?? 0
+        setStars(s)
+        setPhase('result')
+      }
+    }, 50)
+
+    return () => { fired = true; clearInterval(id) }
+  }, [phase, trailKey])
 
   function next() {
+    setTimerFrac(1)
     if (letterIdx >= 25) { setPhase('done'); return }
     setLetterIdx(i => i + 1)
     setPhase('trace')
@@ -192,11 +198,13 @@ export default function LetterTrace() {
   }
 
   function retry() {
+    setTimerFrac(1)
     setPhase('trace')
     setTrailKey(k => k + 1)
   }
 
   function restart() {
+    setTimerFrac(1)
     setLetterIdx(0)
     setPhase('trace')
     setTrailKey(k => k + 1)
@@ -214,7 +222,8 @@ export default function LetterTrace() {
     )
   }
 
-  const MESSAGES = ['Keep trying! 💪', 'Good try! 👍', 'Great job! ✨', 'Perfect! 🎉']
+  const timerColor = timerFrac > 0.5 ? '#6bcb77' : timerFrac > 0.25 ? '#ffd93d' : '#ff6b6b'
+  const MESSAGES   = ['Keep trying! 💪', 'Good try! 👍', 'Great job! ✨', 'Perfect! 🎉']
 
   return (
     <div className={styles.game}>
@@ -232,18 +241,26 @@ export default function LetterTrace() {
         <button className={styles.hudClear} onClick={retry}>Clear</button>
       </div>
 
+      {/* Countdown bar */}
+      <div className={styles.timerTrack}>
+        <div
+          className={styles.timerFill}
+          style={{ width: `${timerFrac * 100}%`, background: timerColor }}
+        />
+      </div>
+
       {/* Hint */}
       <p className={styles.hint}>
-        Trace the letter <span style={{ color, fontWeight: 900 }}>{letter}</span> — start at&nbsp;①
+        Trace the letter <span style={{ color, fontWeight: 900 }}>{letter}</span>!
       </p>
 
       {/* Tracing area */}
       <div className={styles.canvasWrap}>
         <TracingSVG
           key={trailKey}
+          ref={tracingRef}
           strokes={data.strokes}
           color={color}
-          onFinish={handleFinish}
         />
       </div>
 

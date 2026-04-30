@@ -75,6 +75,20 @@
   50%     { transform: scale(1.5); }
 }
 
+/* ─── Countdown bar ─────────────────────────────────── */
+.timerTrack {
+  width: 100%;
+  height: 10px;
+  background: rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+
+.timerFill {
+  height: 100%;
+  border-radius: 0 3px 3px 0;
+  transition: width 0.05s linear, background 0.4s ease;
+}
+
 /* ─── Hint ───────────────────────────────────────────── */
 .hint {
   font-size: clamp(15px, 4vw, 20px);
