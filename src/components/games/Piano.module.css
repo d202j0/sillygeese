@@ -245,23 +245,37 @@
   border-right: 1px solid rgba(255,255,255,0.05);
 }
 
-/* Hit zone — glowing line at the bottom of the falling area */
+/* Hit zone — clearly marked tap target band */
 .hitZone {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 6px;
-  background: linear-gradient(90deg, transparent, #ffd93d, #ff9f43, #ffd93d, transparent);
-  box-shadow: 0 0 16px #ffd93d, 0 0 32px #ff9f4388;
-  animation: hitZonePulse 1.5s ease-in-out infinite;
+  height: 52px;
+  background: linear-gradient(to bottom, rgba(255,217,61,0.08) 0%, rgba(255,217,61,0.18) 100%);
+  border-top: 3px solid #ffd93d;
+  box-shadow: 0 0 24px #ffd93d66, 0 -6px 32px #ff9f4333;
+  animation: hitZonePulse 1.4s ease-in-out infinite;
   pointer-events: none;
   z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hitZoneLabel {
+  font-family: 'Nunito', cursive;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  color: rgba(255,217,61,0.55);
+  text-transform: uppercase;
+  pointer-events: none;
 }
 
 @keyframes hitZonePulse {
-  0%,100% { opacity: 0.8; box-shadow: 0 0 12px #ffd93d, 0 0 24px #ff9f4366; }
-  50%     { opacity: 1;   box-shadow: 0 0 20px #ffd93d, 0 0 40px #ff9f4388; }
+  0%,100% { border-color: rgba(255,217,61,0.6); box-shadow: 0 0 16px #ffd93d44, 0 -6px 24px #ff9f4322; }
+  50%     { border-color: #ffd93d;               box-shadow: 0 0 32px #ffd93d88, 0 -6px 40px #ff9f4355; }
 }
 
 /* Lane lines */
@@ -444,6 +458,58 @@
 
 .keyBlack .keyLabel { color: rgba(255,255,255,0.3); }
 .keyGlowing.keyWhite .keyLabel { color: rgba(0,0,0,0.7); }
+
+/* Key: note is live in the hit zone — "TAP NOW" */
+.keyInZone {
+  animation: keyZonePulse 0.35s ease-in-out infinite !important;
+  z-index: 3 !important;
+}
+
+@keyframes keyZonePulse {
+  0%,100% { filter: brightness(1.5) saturate(2);   transform: scaleY(1.04) translateY(-2px); }
+  50%     { filter: brightness(2.0) saturate(2.5); transform: scaleY(1.07) translateY(-4px); }
+}
+
+/* Falling note: brightens when it enters the hit zone */
+.fallingNoteInZone {
+  border: 3px solid rgba(255,255,255,0.95) !important;
+  box-shadow: 0 0 20px var(--note-color), 0 0 44px var(--note-color, #fff)88,
+              inset 0 2px 6px rgba(255,255,255,0.5) !important;
+  filter: brightness(1.35) saturate(1.2);
+}
+
+/* Completion screen extras */
+.songDoneStars {
+  font-size: 34px;
+  letter-spacing: 6px;
+  margin: 8px 0 2px;
+}
+
+.songDoneAccuracy {
+  font-size: 14px;
+  color: #999;
+  font-weight: 700;
+  font-family: 'Nunito', cursive;
+  margin-bottom: 4px;
+}
+
+.songDoneBtns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.songDoneBtnPrimary {
+  background: linear-gradient(135deg, #7b2fff, #c77dff);
+}
+
+.songDoneBtnSecondary {
+  background: rgba(0,0,0,0.07) !important;
+  color: #777 !important;
+  font-size: 16px !important;
+  box-shadow: none !important;
+}
 
 @media (max-width: 480px) {
   .songGrid { grid-template-columns: repeat(2, 1fr); }

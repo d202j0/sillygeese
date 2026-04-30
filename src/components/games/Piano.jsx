@@ -3,9 +3,16 @@ import { Link } from 'react-router-dom'
 import styles from './Piano.module.css'
 
 // ─── Constants ────────────────────────────────────────
-const FALL_SECONDS = 3.5
-const MIN_GAP_MS   = 250
-const KEY_COUNT    = 8
+const MIN_GAP_MS     = 250
+const KEY_COUNT      = 8
+const ZONE_OPEN_FRAC = 0.80  // note enters hit zone at 80% through fall
+const ZONE_CLOSE_MS  = 350   // grace ms after note reaches bottom
+
+const DIFFICULTY = {
+  easy:   { label: 'Easy',   emoji: '🐣', bpmMult: 0.65, fallSeconds: 4.5 },
+  normal: { label: 'Normal', emoji: '🎵', bpmMult: 1.0,  fallSeconds: 3.5 },
+  hard:   { label: 'Hard',   emoji: '🔥', bpmMult: 1.3,  fallSeconds: 2.5 },
+}
 
 // ─── Note frequencies ─────────────────────────────────
 const NOTE_FREQ = {
@@ -133,7 +140,7 @@ function createAudio() {
       g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + Math.max(dur, 0.3))
       o1.start(); o1.stop(ctx.currentTime + Math.max(dur, 0.3))
       o2.start(); o2.stop(ctx.currentTime + Math.max(dur, 0.3))
-    } catch(e) {}
+    } catch { /* noop — audio unsupported */ }
   }
   function playSuccess() {
     try {
@@ -146,15 +153,24 @@ function createAudio() {
         g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.35)
         o.start(t); o.stop(t + 0.35)
       })
-    } catch(e) {}
+    } catch { /* noop — audio unsupported */ }
   }
   return { init, playNote, playSuccess }
 }
 
-// ─── Song picker screen ───────────────────────────────
+// ─── Stars from accuracy ──────────────────────────────
+function starsFromAccuracy(acc) {
+  if (acc >= 0.9) return 3
+  if (acc >= 0.6) return 2
+  if (acc >= 0.3) return 1
+  return 0
+}
+
+// ─── Song picker ─────────────────────────────────────
 function SongPicker({ onStart }) {
   const [mode, setMode] = useState(null)
   const [song, setSong] = useState(null)
+  const [difficulty, setDifficulty] = useState('normal')
   const audio = useRef(createAudio())
 
   return (
@@ -186,26 +202,42 @@ function SongPicker({ onStart }) {
         </div>
 
         {mode === 'song' && (
-          <div className={styles.setupSection}>
-            <div className={styles.setupLabel}>Pick a song</div>
-            <div className={styles.songGrid}>
-              {SONGS.map(s => (
-                <button key={s.id}
-                  className={`${styles.songBtn} ${song?.id===s.id ? styles.songBtnActive : ''}`}
-                  onClick={() => setSong(s)}
-                >
-                  <span className={styles.songEmoji}>{s.emoji}</span>
-                  <span className={styles.songTitle}>{s.title}</span>
-                </button>
-              ))}
+          <>
+            <div className={styles.setupSection}>
+              <div className={styles.setupLabel}>Pick a song</div>
+              <div className={styles.songGrid}>
+                {SONGS.map(s => (
+                  <button key={s.id}
+                    className={`${styles.songBtn} ${song?.id===s.id ? styles.songBtnActive : ''}`}
+                    onClick={() => setSong(s)}
+                  >
+                    <span className={styles.songEmoji}>{s.emoji}</span>
+                    <span className={styles.songTitle}>{s.title}</span>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+
+            <div className={styles.setupSection}>
+              <div className={styles.setupLabel}>Difficulty</div>
+              <div className={styles.setupBtnRow}>
+                {Object.entries(DIFFICULTY).map(([key, d]) => (
+                  <button key={key}
+                    className={`${styles.setupBtn} ${difficulty===key ? styles.setupBtnActive : ''}`}
+                    onClick={() => setDifficulty(key)}
+                  >
+                    {d.emoji} {d.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </>
         )}
 
         {(mode === 'free' || (mode === 'song' && song)) && (
           <button
             className={styles.startBtn}
-            onClick={() => onStart({ mode, song })}
+            onClick={() => onStart({ mode, song, difficulty })}
           >
             {mode === 'free' ? 'Start playing! 🎵' : `Play ${song.title}! 🎼`}
           </button>
@@ -215,46 +247,42 @@ function SongPicker({ onStart }) {
   )
 }
 
-// ─── Falling note ─────────────────────────────────────
-function FallingNote({ id, note, beats, bpm, color, onHit, onMiss, areaHeight, pianoHeight }) {
-  const ref    = useRef(null)
-  const hitRef = useRef(false)
+// ─── Falling note (visual only — tap the key, not the note) ──────────────────
+function FallingNote({ id, note, beats, bpm, color, onEnterZone, onMiss, areaHeight, fallSeconds }) {
+  const [inZone, setInZone] = useState(false)
 
   const keyIdx   = KEYS.findIndex(k => k.note === note)
   const travelPx = areaHeight
-  const beatPx   = travelPx / (FALL_SECONDS * (bpm / 60))
+  const beatPx   = travelPx / (fallSeconds * (bpm / 60))
   const noteH    = Math.max(32, beats * beatPx * 0.85)
   const leftPct  = (keyIdx / KEY_COUNT) * 100 + (100 / KEY_COUNT) * 0.1
   const widthPct = (100 / KEY_COUNT) * 0.8
 
   useEffect(() => {
-    const t = setTimeout(() => {
-      if (!hitRef.current) onMiss(id)
-    }, FALL_SECONDS * 1000 + 400)
-    return () => clearTimeout(t)
-  }, [])
+    const enterTimer = setTimeout(() => {
+      setInZone(true)
+      onEnterZone(note, id)
+    }, fallSeconds * ZONE_OPEN_FRAC * 1000)
 
-  const hit = useCallback((e) => {
-    e.preventDefault(); e.stopPropagation()
-    if (hitRef.current) return
-    hitRef.current = true
-    if (ref.current) ref.current.style.opacity = '0'
-    onHit(note, id)
-  }, [note, id, onHit])
+    const missTimer = setTimeout(() => {
+      onMiss(note, id)
+    }, fallSeconds * 1000 + ZONE_CLOSE_MS)
+
+    return () => { clearTimeout(enterTimer); clearTimeout(missTimer) }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div
-      ref={ref}
-      className={styles.fallingNote}
+      className={`${styles.fallingNote} ${inZone ? styles.fallingNoteInZone : ''}`}
       style={{
         left: `${leftPct}%`,
         width: `${widthPct}%`,
         height: `${noteH}px`,
         background: color,
-        animationDuration: `${FALL_SECONDS}s`,
+        animationDuration: `${fallSeconds}s`,
         '--travel': `${travelPx}px`,
+        '--note-color': color,
       }}
-      onPointerDown={hit}
     >
       <span className={styles.fallingNoteLabel}>{note.replace(/[0-9]/g, '')}</span>
     </div>
@@ -262,7 +290,7 @@ function FallingNote({ id, note, beats, bpm, color, onHit, onMiss, areaHeight, p
 }
 
 // ─── Piano key ────────────────────────────────────────
-function PianoKey({ note, black, onPlay, glowColor }) {
+function PianoKey({ note, black, onPlay, glowColor, inZone }) {
   const [pressed, setPressed] = useState(false)
   const color = NOTE_COLORS[note]
 
@@ -273,12 +301,12 @@ function PianoKey({ note, black, onPlay, glowColor }) {
     setTimeout(() => setPressed(false), 150)
   }, [note, onPlay])
 
-  const glowing = !!glowColor
+  const active = !!glowColor || inZone
 
   return (
     <div
-      className={`${styles.key} ${black ? styles.keyBlack : styles.keyWhite} ${pressed ? styles.keyPressed : ''} ${glowing ? styles.keyGlowing : ''}`}
-      style={glowing ? { boxShadow: `0 0 24px ${color}, 0 0 48px ${color}88`, background: color } : {}}
+      className={`${styles.key} ${black ? styles.keyBlack : styles.keyWhite} ${pressed ? styles.keyPressed : ''} ${inZone ? styles.keyInZone : (glowColor ? styles.keyGlowing : '')}`}
+      style={active ? { boxShadow: `0 0 24px ${color}, 0 0 48px ${color}88`, background: color } : {}}
       onPointerDown={handlePress}
     >
       <span className={styles.keyLabel}>{note.replace(/[0-9]/g, '')}</span>
@@ -287,22 +315,30 @@ function PianoKey({ note, black, onPlay, glowColor }) {
 }
 
 // ─── Game ─────────────────────────────────────────────
-function PianoGame({ config, onBack }) {
-  const { mode, song } = config
+function PianoGame({ config, onBack, onPlayAgain }) {
+  const { mode, song, difficulty: diffKey = 'normal' } = config
+  const diff         = DIFFICULTY[diffKey] || DIFFICULTY.normal
+  const fallSeconds  = mode === 'song' ? diff.fallSeconds : 3.5
+  const effectiveBpm = song ? Math.round(song.bpm * diff.bpmMult) : 100
+
   const audio = useRef(createAudio())
 
   const [fallingNotes, setFallingNotes] = useState([])
   const [glowingKeys,  setGlowingKeys]  = useState({})
+  const [inZoneNotes,  setInZoneNotes]  = useState(new Set())
   const [score,        setScore]        = useState(0)
   const [combo,        setCombo]        = useState(0)
   const [songDone,     setSongDone]     = useState(false)
   const [message,      setMessage]      = useState(null)
+  const [hitCount,     setHitCount]     = useState(0)
+  const [totalNotes,   setTotalNotes]   = useState(0)
 
-  const containerRef = useRef(null)
-  const pianoRef     = useRef(null)
-  const noteIdRef    = useRef(0)
-  const msgTimer     = useRef(null)
-  const timersRef    = useRef([])
+  const containerRef   = useRef(null)
+  const pianoRef       = useRef(null)
+  const noteIdRef      = useRef(0)
+  const msgTimer       = useRef(null)
+  const timersRef      = useRef([])
+  const activeNotesRef = useRef({})  // note name → falling note id, currently in hit zone
 
   const showMsg = useCallback((text, color = '#ffd93d') => {
     clearTimeout(msgTimer.current)
@@ -315,69 +351,89 @@ function PianoGame({ config, onBack }) {
     setTimeout(() => setGlowingKeys(g => { const n = { ...g }; delete n[note]; return n }), durationMs)
   }, [])
 
-  const playKey = useCallback((note) => {
-    audio.current.init()
-    audio.current.playNote(note, 0.5)
-    glowKey(note, 300)
-  }, [glowKey])
+  const removeFromZone = useCallback((note) => {
+    delete activeNotesRef.current[note]
+    setInZoneNotes(s => { const next = new Set(s); next.delete(note); return next })
+  }, [])
 
-  const onHit = useCallback((note, id) => {
-    playKey(note)
-    setFallingNotes(fn => fn.filter(n => n.id !== id))
-    setScore(s => s + 10)
-    setCombo(c => {
-      const next = c + 1
-      showMsg(next >= 5 ? '🔥 On fire!' : next >= 3 ? '✨ Great!' : '👍 Good!', '#ffd93d')
-      return next
-    })
-  }, [playKey, showMsg])
+  const onEnterZone = useCallback((note, id) => {
+    activeNotesRef.current[note] = id
+    setInZoneNotes(s => new Set([...s, note]))
+  }, [])
 
-  const onMiss = useCallback((id) => {
+  const onMiss = useCallback((note, id) => {
+    removeFromZone(note)
     setFallingNotes(fn => fn.filter(n => n.id !== id))
     setCombo(0)
-    showMsg('Miss!', '#ff6b6b')
-  }, [showMsg])
+    showMsg('Miss! ✗', '#ff6b6b')
+  }, [removeFromZone, showMsg])
+
+  const handleKeyPress = useCallback((note) => {
+    audio.current.init()
+    audio.current.playNote(note, 0.5)
+    glowKey(note, 250)
+
+    if (mode !== 'song') return
+
+    const activeId = activeNotesRef.current[note]
+    if (activeId != null) {
+      removeFromZone(note)
+      setFallingNotes(fn => fn.filter(n => n.id !== activeId))
+      setScore(s => s + 10)
+      setHitCount(h => h + 1)
+      setCombo(c => {
+        const next = c + 1
+        showMsg(next >= 5 ? '🔥 On fire!' : next >= 3 ? '✨ Great!' : '👍 Nice!', '#ffd93d')
+        return next
+      })
+    }
+    // No note in zone: sound plays, no score change — exploring is fine
+  }, [mode, glowKey, removeFromZone, showMsg])
 
   // Schedule song
   useEffect(() => {
     if (mode !== 'song' || !song) return
     audio.current.init()
-    const beatMs = 60000 / song.bpm
+    const beatMs = 60000 / effectiveBpm
     const timers = []
     let elapsed = 0
     let lastSpawn = -MIN_GAP_MS
+    let noteCount = 0
 
     song.notes.forEach(([note, beats]) => {
       if (!NOTE_FREQ[note]) { elapsed += beats * beatMs; return }
+      noteCount++
       const spawnMs = Math.max(elapsed, lastSpawn + MIN_GAP_MS)
       lastSpawn = spawnMs
 
-      // Spawn falling note
       timers.push(setTimeout(() => {
         const id = ++noteIdRef.current
         setFallingNotes(fn => [...fn, { id, note, beats, color: NOTE_COLORS[note] || '#fff' }])
       }, spawnMs))
 
-      // Glow key just before it arrives
+      // Early glow hint at 65% through fall — "get ready"
       timers.push(setTimeout(() => {
-        glowKey(note, 900)
-      }, spawnMs + (FALL_SECONDS - 0.8) * 1000))
+        glowKey(note, 500)
+      }, spawnMs + fallSeconds * 0.65 * 1000))
 
       elapsed += beats * beatMs
     })
 
-    // Song end
+    setTotalNotes(noteCount)
+
     timers.push(setTimeout(() => {
       setSongDone(true)
       audio.current.playSuccess()
-    }, elapsed + FALL_SECONDS * 1000))
+    }, elapsed + (fallSeconds + 0.5) * 1000))
 
     timersRef.current = timers
     return () => timers.forEach(clearTimeout)
-  }, [mode, song, glowKey])
+  }, [mode, song, glowKey, effectiveBpm, fallSeconds])
 
   const areaHeight   = (containerRef.current?.offsetHeight || 600) - (pianoRef.current?.offsetHeight || 140)
-  const pianoHeight  = pianoRef.current?.offsetHeight || 140
+  const accuracy     = totalNotes > 0 ? hitCount / totalNotes : 0
+  const stars        = starsFromAccuracy(accuracy)
+  const accuracyPct  = Math.round(accuracy * 100)
 
   return (
     <div className={styles.game} ref={containerRef}>
@@ -400,7 +456,6 @@ function PianoGame({ config, onBack }) {
 
       {/* Falling area */}
       <div className={styles.fallingArea}>
-        {/* Lane guides */}
         {KEYS.map((k, i) => (
           <div key={k.note} className={styles.lane}
             style={{ left: `${(i / KEY_COUNT) * 100}%`, width: `${100 / KEY_COUNT}%`, background: `${NOTE_COLORS[k.note]}11` }}
@@ -413,12 +468,12 @@ function PianoGame({ config, onBack }) {
             id={fn.id}
             note={fn.note}
             beats={fn.beats}
-            bpm={song.bpm}
+            bpm={effectiveBpm}
             color={fn.color}
-            onHit={onHit}
+            onEnterZone={onEnterZone}
             onMiss={onMiss}
             areaHeight={areaHeight}
-            pianoHeight={pianoHeight}
+            fallSeconds={fallSeconds}
           />
         ))}
 
@@ -426,14 +481,28 @@ function PianoGame({ config, onBack }) {
           <div className={styles.hitMsg} style={{ color: message.color }}>{message.text}</div>
         )}
 
+        {/* Hit zone — the tap target */}
+        {mode === 'song' && <div className={styles.hitZone}><span className={styles.hitZoneLabel}>TAP THE KEY ↓</span></div>}
+
         {songDone && (
           <div className={styles.songDoneOverlay}>
             <div className={styles.songDoneBox}>
               <div className={styles.songDoneEmoji}>🎉</div>
               <h2 className={styles.songDoneTitle}>Amazing!</h2>
               <p className={styles.songDoneSub}>You played {song.title}!</p>
+              <div className={styles.songDoneStars}>
+                {'⭐'.repeat(stars)}{'☆'.repeat(3 - stars)}
+              </div>
+              <p className={styles.songDoneAccuracy}>{accuracyPct}% accuracy</p>
               <p className={styles.songDoneScore}>Score: {score}</p>
-              <button className={styles.songDoneBtn} onClick={onBack}>Pick another song</button>
+              <div className={styles.songDoneBtns}>
+                <button className={`${styles.songDoneBtn} ${styles.songDoneBtnPrimary}`} onClick={onPlayAgain}>
+                  Play again 🔄
+                </button>
+                <button className={`${styles.songDoneBtn} ${styles.songDoneBtnSecondary}`} onClick={onBack}>
+                  Pick another song
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -447,8 +516,9 @@ function PianoGame({ config, onBack }) {
               key={note}
               note={note}
               black={black}
-              onPlay={playKey}
+              onPlay={handleKeyPress}
               glowColor={glowingKeys[note] ? NOTE_COLORS[note] : null}
+              inZone={inZoneNotes.has(note)}
             />
           ))}
         </div>
@@ -461,6 +531,14 @@ function PianoGame({ config, onBack }) {
 // ─── Root ─────────────────────────────────────────────
 export default function Piano() {
   const [config, setConfig] = useState(null)
+  const [playCount, setPlayCount] = useState(0)
   if (!config) return <SongPicker onStart={setConfig} />
-  return <PianoGame key={config.song?.id || 'free'} config={config} onBack={() => setConfig(null)} />
+  return (
+    <PianoGame
+      key={`${config.song?.id || 'free'}-${playCount}`}
+      config={config}
+      onBack={() => setConfig(null)}
+      onPlayAgain={() => setPlayCount(c => c + 1)}
+    />
+  )
 }
