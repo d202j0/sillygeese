@@ -36,7 +36,7 @@ const LETTERS = {
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 const PALETTE  = ['#ff6b6b','#ff9f43','#ffd93d','#6bcb77','#4d96ff','#c77dff','#ff6eb4','#44ddcc']
 const getColor = (idx) => PALETTE[idx % PALETTE.length]
-const DURATION  = 5000  // ms
+const DURATION  = 8000  // ms
 
 // ─── Helpers ──────────────────────────────────────────
 function screenToSVG(svgEl, clientX, clientY) {
