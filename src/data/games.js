@@ -109,4 +109,15 @@ export const GAMES = [
     skills: ['Shapes', 'Matching', 'Fine motor'],
     ages: '3–6',
   },
+  {
+    id: 'letter-trace',
+    title: 'Letter Trace',
+    description: 'Trace the letters of the alphabet from A to Z with your finger!',
+    emoji: '✏️',
+    theme: 'green',
+    path: '/play/letter-trace',
+    available: true,
+    skills: ['Letters', 'Fine motor', 'Writing'],
+    ages: '3–6',
+  },
 ]

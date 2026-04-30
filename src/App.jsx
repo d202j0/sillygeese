@@ -10,6 +10,7 @@ import CountingCatchPage from './pages/games/CountingCatchPage'
 import AlphabetTapPage from './pages/games/AlphabetTapPage'
 import BubbleBurstPage from './pages/games/BubbleBurstPage'
 import ShapeSorterPage from './pages/games/ShapeSorterPage'
+import LetterTracePage from './pages/games/LetterTracePage'
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
       <Route path="/play/alphabet-tap"   element={<AlphabetTapPage />} />
       <Route path="/play/bubble-burst"   element={<BubbleBurstPage />} />
       <Route path="/play/shape-sorter"   element={<ShapeSorterPage />} />
+      <Route path="/play/letter-trace"   element={<LetterTracePage />} />
     </Routes>
   )
 }
