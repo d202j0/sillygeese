@@ -65,15 +65,16 @@ const leftPath  = d => transformPath(d, NUM2_SX, NUM2_SY, NUM2_TX[0], NUM2_TY)
 const rightPath = d => transformPath(d, NUM2_SX, NUM2_SY, NUM2_TX[1], NUM2_TY)
 
 // ─── Multi-letter layout for words ────────────────────
-// 3-letter: cols 0-65, 68-133, 136-201 (sx = 65/180)
-// 4-letter: cols 0-48, 50-98, 100-148, 150-198 (sx = 46/180)
+// Words use viewBox "0 0 300 260" so letters get more horizontal room.
+// 3-letter: each letter ~95px wide in a 300px canvas (sx = 95/180)
+// 4-letter: each letter ~69px wide in a 300px canvas (sx = 69/180)
 const WORD_SY = 233 / 250
 const WORD_TY = 15 - 10 * WORD_SY
+const WORD_SX = { 3: 95 / 180, 4: 69 / 180 }
 const WORD_TX = {
-  3: [1   - 10 * (65 / 180), 68  - 10 * (65 / 180), 136 - 10 * (65 / 180)],
-  4: [0   - 10 * (46 / 180), 50  - 10 * (46 / 180), 100 - 10 * (46 / 180), 150 - 10 * (46 / 180)],
+  3: [5   - 10 * WORD_SX[3], 103 - 10 * WORD_SX[3], 201 - 10 * WORD_SX[3]],
+  4: [4   - 10 * WORD_SX[4], 76  - 10 * WORD_SX[4], 148 - 10 * WORD_SX[4], 220 - 10 * WORD_SX[4]],
 }
-const WORD_SX = { 3: 65 / 180, 4: 46 / 180 }
 
 function wordStrokes(word) {
   const n  = word.length
@@ -108,6 +109,14 @@ const WORD_LIST = [
 
 const PALETTE  = ['#ff6b6b','#ff9f43','#ffd93d','#6bcb77','#4d96ff','#c77dff','#ff6eb4','#44ddcc']
 const getColor = idx => PALETTE[idx % PALETTE.length]
+
+// Stroke width scales proportionally with letter x-compression
+function getStrokeWidth(mode, idx) {
+  if (mode === 'letters') return 22
+  if (mode === 'numbers') return NUMBERS[idx].label.length === 1 ? 22 : Math.round(22 * NUM2_SX)
+  const n = WORD_LIST[idx].label.length
+  return Math.round(22 * WORD_SX[n])
+}
 
 // Timer durations:
 // letters / single-digit numbers: 8s
@@ -155,7 +164,7 @@ function getStars(acc) {
 }
 
 // ─── Tracing SVG ──────────────────────────────────────
-const TracingSVG = forwardRef(function TracingSVG({ strokes, color }, ref) {
+const TracingSVG = forwardRef(function TracingSVG({ strokes, color, sw = 22, viewBox = '0 0 200 260' }, ref) {
   const svgRef     = useRef(null)
   const trailElRef = useRef(null)
   const segments   = useRef([])
@@ -196,11 +205,16 @@ const TracingSVG = forwardRef(function TracingSVG({ strokes, color }, ref) {
 
   const onUp = useCallback(() => { isDown.current = false }, [])
 
+  const gap  = Math.round(sw * 13 / 22)
+  const dash = `${sw} ${gap}`
+  const [vbW, vbH] = viewBox.split(' ').slice(2).map(Number)
+
   return (
     <svg
       ref={svgRef}
-      viewBox="0 0 200 260"
+      viewBox={viewBox}
       className={styles.svg}
+      style={{ aspectRatio: `${vbW} / ${vbH}` }}
       onPointerDown={onDown}
       onPointerMove={onMove}
       onPointerUp={onUp}
@@ -208,16 +222,16 @@ const TracingSVG = forwardRef(function TracingSVG({ strokes, color }, ref) {
     >
       {strokes.map((d, i) => (
         <path key={`g${i}`} d={d} fill="none"
-          stroke={color} strokeWidth="22" strokeLinecap="round" strokeLinejoin="round"
+          stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round"
           opacity="0.10" />
       ))}
       {strokes.map((d, i) => (
         <path key={`d${i}`} d={d} data-trace fill="none"
-          stroke={color} strokeWidth="22" strokeLinecap="round" strokeLinejoin="round"
-          strokeDasharray="22 13" opacity="0.50" />
+          stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round"
+          strokeDasharray={dash} opacity="0.50" />
       ))}
       <path ref={trailElRef} d="" fill="none"
-        stroke={color} strokeWidth="24" strokeLinecap="round" strokeLinejoin="round"
+        stroke={color} strokeWidth={sw + 2} strokeLinecap="round" strokeLinejoin="round"
         opacity="0.88" />
     </svg>
   )
@@ -246,7 +260,9 @@ export default function LetterTrace() {
     strokes = item.strokes
   }
 
-  const duration = getDuration(mode, itemIdx)
+  const duration  = getDuration(mode, itemIdx)
+  const sw        = getStrokeWidth(mode, itemIdx)
+  const svgViewBox = mode === 'words' ? '0 0 300 260' : '0 0 200 260'
 
   useEffect(() => {
     if (phase !== 'trace') return
@@ -405,6 +421,8 @@ export default function LetterTrace() {
           ref={tracingRef}
           strokes={strokes}
           color={color}
+          sw={sw}
+          viewBox={svgViewBox}
         />
       </div>
 
