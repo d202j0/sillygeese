@@ -68,12 +68,14 @@ const rightPath = d => transformPath(d, NUM2_SX, NUM2_SY, NUM2_TX[1], NUM2_TY)
 // Words use viewBox "0 0 300 260" so letters get more horizontal room.
 // 3-letter: each letter ~95px wide in a 300px canvas (sx = 95/180)
 // 4-letter: each letter ~69px wide in a 300px canvas (sx = 69/180)
+// 5-letter: each letter ~55px wide in a 300px canvas (sx = 55/180)
 const WORD_SY = 233 / 250
 const WORD_TY = 15 - 10 * WORD_SY
-const WORD_SX = { 3: 95 / 180, 4: 69 / 180 }
+const WORD_SX = { 3: 95 / 180, 4: 69 / 180, 5: 55 / 180 }
 const WORD_TX = {
   3: [5   - 10 * WORD_SX[3], 103 - 10 * WORD_SX[3], 201 - 10 * WORD_SX[3]],
   4: [4   - 10 * WORD_SX[4], 76  - 10 * WORD_SX[4], 148 - 10 * WORD_SX[4], 220 - 10 * WORD_SX[4]],
+  5: [4   - 10 * WORD_SX[5], 63  - 10 * WORD_SX[5], 122 - 10 * WORD_SX[5], 181 - 10 * WORD_SX[5], 240 - 10 * WORD_SX[5]],
 }
 
 function wordStrokes(word) {
@@ -103,6 +105,7 @@ const NUMBERS = Array.from({ length: 29 }, (_, i) => {
 })
 
 const WORD_LIST = [
+  'EVA', 'DAD', 'MUM', 'HUD', 'DALIA',
   'CAT', 'DOG', 'SUN', 'HAT', 'BUG', 'HEN', 'PIG', 'COW', 'ANT', 'BEE',
   'FOX', 'OWL', 'BEAR', 'DUCK', 'FISH', 'FROG', 'CAKE', 'BALL', 'STAR', 'MOON',
 ].map(w => ({ label: w, strokes: wordStrokes(w) }))
@@ -121,12 +124,14 @@ function getStrokeWidth(mode, idx) {
 // Timer durations:
 // letters / single-digit numbers: 8s
 // two-digit numbers: 13s
-// 3-letter words: 18s
-// 4-letter words: 23s
+// 3-letter words: 18s, 4-letter: 23s, 5-letter: 28s
 function getDuration(mode, idx) {
   if (mode === 'letters') return 8000
   if (mode === 'numbers') return NUMBERS[idx].label.length === 1 ? 8000 : 13000
-  return WORD_LIST[idx].label.length === 3 ? 18000 : 23000
+  const len = WORD_LIST[idx].label.length
+  if (len === 3) return 18000
+  if (len === 4) return 23000
+  return 28000
 }
 
 // ─── Helpers ──────────────────────────────────────────
