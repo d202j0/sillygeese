@@ -65,17 +65,20 @@ const leftPath  = d => transformPath(d, NUM2_SX, NUM2_SY, NUM2_TX[0], NUM2_TY)
 const rightPath = d => transformPath(d, NUM2_SX, NUM2_SY, NUM2_TX[1], NUM2_TY)
 
 // ─── Multi-letter layout for words ────────────────────
-// Words use viewBox "0 0 300 260" so letters get more horizontal room.
+// Words use viewBox "0 0 {WORD_VB_W[n]} 260". 3-5 letters share 300px;
+// 6+ letters expand the canvas (59px per letter) so each letter stays ~55px wide (sx = 55/180).
 // 3-letter: each letter ~95px wide in a 300px canvas (sx = 95/180)
 // 4-letter: each letter ~69px wide in a 300px canvas (sx = 69/180)
-// 5-letter: each letter ~55px wide in a 300px canvas (sx = 55/180)
+// 5-7-letter: each letter ~55px wide, canvas grows with word length
 const WORD_SY = 233 / 250
 const WORD_TY = 15 - 10 * WORD_SY
-const WORD_SX = { 3: 95 / 180, 4: 69 / 180, 5: 55 / 180 }
+const WORD_SX = { 3: 95 / 180, 4: 69 / 180, 5: 55 / 180, 6: 55 / 180, 7: 55 / 180 }
+const WORD_VB_W = { 3: 300, 4: 300, 5: 300, 6: 360, 7: 420 }
+const _wx = n => Array.from({ length: n }, (_, i) => (4 + i * 59) - 10 * WORD_SX[n])
 const WORD_TX = {
   3: [5   - 10 * WORD_SX[3], 103 - 10 * WORD_SX[3], 201 - 10 * WORD_SX[3]],
   4: [4   - 10 * WORD_SX[4], 76  - 10 * WORD_SX[4], 148 - 10 * WORD_SX[4], 220 - 10 * WORD_SX[4]],
-  5: [4   - 10 * WORD_SX[5], 63  - 10 * WORD_SX[5], 122 - 10 * WORD_SX[5], 181 - 10 * WORD_SX[5], 240 - 10 * WORD_SX[5]],
+  5: _wx(5), 6: _wx(6), 7: _wx(7),
 }
 
 function wordStrokes(word) {
@@ -105,7 +108,7 @@ const NUMBERS = Array.from({ length: 29 }, (_, i) => {
 })
 
 const WORD_LIST = [
-  'EVA', 'DAD', 'MUM', 'HUD', 'DALIA',
+  'EVA', 'DAD', 'MUM', 'HUD', 'DALIA', 'CHARLEY',
   'CAT', 'DOG', 'SUN', 'HAT', 'BUG', 'HEN', 'PIG', 'COW', 'ANT', 'BEE',
   'FOX', 'OWL', 'BEAR', 'DUCK', 'FISH', 'FROG', 'CAKE', 'BALL', 'STAR', 'MOON',
 ].map(w => ({ label: w, strokes: wordStrokes(w) }))
@@ -122,16 +125,13 @@ function getStrokeWidth(mode, idx) {
 }
 
 // Timer durations:
-// letters / single-digit numbers: 8s
-// two-digit numbers: 13s
-// 3-letter words: 18s, 4-letter: 23s, 5-letter: 28s
+// letters / single-digit numbers: 8s, two-digit numbers: 13s
+// words: 18s + 5s per letter beyond 3 (3→18s, 4→23s, 5→28s, 6→33s, 7→38s)
 function getDuration(mode, idx) {
   if (mode === 'letters') return 8000
   if (mode === 'numbers') return NUMBERS[idx].label.length === 1 ? 8000 : 13000
   const len = WORD_LIST[idx].label.length
-  if (len === 3) return 18000
-  if (len === 4) return 23000
-  return 28000
+  return 18000 + (len - 3) * 5000
 }
 
 // ─── Helpers ──────────────────────────────────────────
@@ -267,7 +267,9 @@ export default function LetterTrace() {
 
   const duration  = getDuration(mode, itemIdx)
   const sw        = getStrokeWidth(mode, itemIdx)
-  const svgViewBox = mode === 'words' ? '0 0 300 260' : '0 0 200 260'
+  const svgViewBox = mode === 'words'
+    ? `0 0 ${WORD_VB_W[item.label.length] ?? 300} 260`
+    : '0 0 200 260'
 
   useEffect(() => {
     if (phase !== 'trace') return
