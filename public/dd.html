@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digital Dynamism — A framework for organisations in permanent motion</title>
+<meta name="description" content="Digital Dynamism is a framework for organisations in permanent motion — digital capability as a disposition, not a destination. Four principles: Contextual, Decisive, Transparent, Motivational.">
+<meta property="og:title" content="Digital Dynamism">
+<meta property="og:description" content="A framework for organisations in permanent motion. Digital capability is not a destination you reach — it is a disposition you continuously hold.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://digitaldynamism.com">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Digital Dynamism">
+<meta name="twitter:description" content="A framework for organisations in permanent motion. Digital capability is not a destination you reach — it is a disposition you continuously hold.">
+<style>
+  :root {
+    --bg: #1A1A2E;
+    --panel: #21213A;
+    --ink: #ECECF2;
+    --ink-soft: #BDBDCC;
+    --ink-mute: #80809C;
+    --line: rgba(255,255,255,0.09);
+    --bad: #CC7676;
+    --good: #82AE7C;
+    --bad-tint: rgba(204,118,118,0.07);
+    --good-tint: rgba(130,174,124,0.07);
+    --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink-soft);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection { background: rgba(130,174,124,0.30); color: var(--ink); }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .narrow { max-width: 680px; }
+
+  /* ---- Header ---- */
+  .site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    padding: 17px 0;
+    border-bottom: 1px solid transparent;
+    transition: background .3s ease, border-color .3s ease;
+  }
+  .site-header.scrolled {
+    background: rgba(26,26,46,0.84);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom-color: var(--line);
+  }
+  .site-header .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .wordmark {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .header-note {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-mute);
+  }
+
+  /* ---- Hero ---- */
+  .hero {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 0 70px;
+  }
+  .hero .l1, .hero .l2 {
+    margin: 0;
+    font-size: clamp(2.1rem, 8.6vw, 5.2rem);
+    line-height: 1.07;
+    letter-spacing: -0.025em;
+    font-weight: 600;
+  }
+  .hero .l1 { color: var(--ink-mute); }
+  .hero .l2 { color: var(--ink); }
+  .cue {
+    margin-top: clamp(2.6rem, 7vw, 4.6rem);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .cue-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(180deg, var(--ink-mute), transparent);
+  }
+  .cue span {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-mute);
+  }
+
+  /* ---- Generic section ---- */
+  section { padding: clamp(4.6rem, 11vw, 8.4rem) 0; }
+  .ruled { border-top: 1px solid var(--line); }
+
+  .eyebrow {
+    font-size: 0.74rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-mute);
+    margin: 0 0 1.5rem;
+  }
+
+  h2 {
+    font-size: clamp(1.9rem, 5.2vw, 3rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 1.7rem;
+  }
+
+  p { margin: 0 0 1.3rem; }
+  p:last-child { margin-bottom: 0; }
+
+  .lead {
+    font-size: clamp(1.16rem, 2.5vw, 1.46rem);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  /* ---- Principles ---- */
+  .principles-intro p:last-of-type { color: var(--ink); }
+
+  .principle { border-top: 1px solid var(--line); }
+
+  .p-head {
+    background: var(--panel);
+    padding: clamp(2.3rem, 5.5vw, 3.6rem) 0;
+  }
+  .p-head .wrap {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: clamp(1rem, 3.4vw, 2.2rem);
+    align-items: center;
+  }
+  .p-num {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: clamp(2.3rem, 5.6vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: rgba(236,236,242,0.22);
+  }
+  .p-name {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    margin: 0;
+    font-size: clamp(1.8rem, 5vw, 2.9rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .p-tag {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0.5rem 0 0;
+    font-size: clamp(0.98rem, 2vw, 1.16rem);
+    color: var(--ink-mute);
+  }
+  .p-body {
+    padding: clamp(2.6rem, 6vw, 4rem) 0 clamp(3.4rem, 8vw, 5rem);
+  }
+
+  /* towards / away */
+  .ta {
+    margin-top: 2.7rem;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+  }
+  .ta-cell { padding: 1.5rem 1.6rem; }
+  .ta-cell + .ta-cell { border-top: 1px solid var(--line); }
+  .ta-label {
+    display: block;
+    margin-bottom: 0.55rem;
+    font-size: 0.71rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+  .ta-cell.towards .ta-label { color: var(--good); }
+  .ta-cell.away .ta-label { color: var(--bad); }
+  .ta-cell p { margin: 0; font-size: 0.99rem; color: var(--ink-soft); }
+
+  /* in-practice examples */
+  .examples { margin-top: 3rem; }
+  .ex-eyebrow {
+    font-size: 0.74rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-mute);
+    margin: 0 0 1.4rem;
+  }
+  .ex {
+    padding: 1.5rem 1.65rem;
+    border-left: 3px solid;
+    border-radius: 0 2px 2px 0;
+    margin-bottom: 1rem;
+  }
+  .ex:last-child { margin-bottom: 0; }
+  .ex-bad  { border-color: var(--bad);  background: var(--bad-tint); }
+  .ex-good { border-color: var(--good); background: var(--good-tint); }
+  .ex-tag {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+  .ex-bad  .ex-tag { color: var(--bad); }
+  .ex-good .ex-tag { color: var(--good); }
+  .ex h4 {
+    margin: 0 0 0.7rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .ex p { margin: 0; font-size: 0.97rem; color: var(--ink-soft); }
+
+  /* what this is not */
+  .nots { list-style: none; margin: 2.2rem 0 0; padding: 0; }
+  .nots li {
+    padding: 1.1rem 0;
+    border-top: 1px solid var(--line);
+    color: var(--ink-mute);
+  }
+  .nots li:last-child { border-bottom: 1px solid var(--line); }
+  .nots li strong { color: var(--ink); font-weight: 600; }
+  .not-close {
+    margin: 2.6rem 0 0;
+    font-size: clamp(1.2rem, 2.7vw, 1.6rem);
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  /* close / etymology */
+  .close { background: var(--panel); }
+  .punch {
+    margin: 1.9rem 0 0;
+    font-size: clamp(1.55rem, 4.4vw, 2.5rem);
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+  .punch .a { display: block; color: var(--ink-mute); }
+  .punch .b { display: block; color: var(--ink); }
+
+  /* footer */
+  footer { padding: 3rem 0; border-top: 1px solid var(--line); }
+  footer .wrap {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+  footer .fw { color: var(--ink); font-weight: 600; font-size: 0.95rem; }
+  footer .fmeta { color: var(--ink-mute); font-size: 0.84rem; }
+
+  /* reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .8s cubic-bezier(.2,.6,.2,1), transform .8s cubic-bezier(.2,.6,.2,1);
+  }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (min-width: 720px) {
+    .ta { display: flex; }
+    .ta-cell { flex: 1; }
+    .ta-cell + .ta-cell { border-top: 0; border-left: 1px solid var(--line); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body id="top">
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="#top">Digital Dynamism</a>
+    <span class="header-note">The Framework</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- Opening provocation -->
+  <section class="hero">
+    <div class="wrap">
+      <p class="l1">You need to be agile.</p>
+      <p class="l2">You are dynamic.</p>
+      <div class="cue">
+        <span class="cue-line"></span>
+        <span>Scroll</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Title / premise -->
+  <section class="ruled">
+    <div class="wrap narrow">
+      <p class="eyebrow reveal">A framework for organisations in permanent motion</p>
+      <h2 class="reveal">Digital Dynamism</h2>
+      <p class="lead reveal">Digital transformation has no endpoint. There is no level five, no completion date, no moment of arrival. Digital capability is not something an organisation achieves — it is something it continuously is. A disposition. The capacity to keep moving well.</p>
+    </div>
+  </section>
+
+  <!-- The arrival fallacy -->
+  <section class="ruled">
+    <div class="wrap narrow">
+      <p class="eyebrow reveal">The premise</p>
+      <h2 class="reveal">The arrival fallacy</h2>
+      <p class="reveal">Every framework promises arrival. A level five. A completion date. A moment when the organisation is finally done — finally modern, finally digital. So organisations keep chasing that moment.</p>
+      <p class="reveal">It never comes. The goal was never to finish. The goal is the capacity to keep moving well.</p>
+    </div>
+  </section>
+
+  <!-- Why now / AI -->
+  <section class="ruled">
+    <div class="wrap narrow">
+      <p class="eyebrow reveal">Why now</p>
+      <h2 class="reveal">AI is the proof, not the framework</h2>
+      <p class="reveal">The organisations that will navigate AI successfully are not the ones with the best models or the biggest budgets. They are the ones already practising Digital Dynamism — because AI does not reward those who plan for it. It rewards those already capable of moving with it.</p>
+      <p class="reveal">The borrowed operating models will not hold. Waterfall governance applied to weekly capability shifts. Transformation programmes with completion dates applied to something that never completes. Consensus processes too slow for windows that close in months.</p>
+      <p class="reveal">AI is not a problem to solve. It is the current and most urgent proof that Digital Dynamism is not optional. But it is only the context. The framework predates AI and will outlast whatever comes after it. The principles hold regardless of era.</p>
+    </div>
+  </section>
+
+  <!-- Freedom -->
+  <section class="ruled">
+    <div class="wrap narrow">
+      <p class="eyebrow reveal">The outcome</p>
+      <h2 class="reveal">Freedom</h2>
+      <p class="reveal">Freedom is not a principle to practise. It is what results from practising all four. A digitally dynamic organisation is free — free to make any decision, at any moment, unconstrained by what came before. No sunk cost too heavy to abandon. No vendor relationship too entrenched to leave. No belief too established to challenge.</p>
+      <p class="lead reveal">The four principles are the practice. Freedom is the reward.</p>
+    </div>
+  </section>
+
+  <!-- Principles intro -->
+  <section class="ruled principles-intro">
+    <div class="wrap narrow">
+      <p class="eyebrow reveal">The practice</p>
+      <h2 class="reveal">Four principles</h2>
+      <p class="reveal">Each principle is a continuous practice, not a milestone. Each depends on the others. They are not a sequence — they are a system.</p>
+      <p class="reveal">Beneath all four runs a single observation: people are not uniformly motivated. Some run towards possibility. Others run away from pain. Every principle has to speak in both directions, or it only ever moves half the organisation.</p>
+    </div>
+  </section>
+
+  <!-- Principle 01 — Contextual -->
+  <article class="principle">
+    <div class="p-head">
+      <div class="wrap reveal">
+        <span class="p-num">01</span>
+        <h3 class="p-name">Contextual</h3>
+        <p class="p-tag">Continuously aware of and honest about current reality</p>
+      </div>
+    </div>
+    <div class="p-body">
+      <div class="wrap narrow">
+        <p class="reveal">Without honest, shared visibility into where an organisation actually is — not where the last status report suggested, not where the roadmap assumed it would be — every decision runs on gut or on a borrowed framework. Neither serves the organisation. Context is the only reliable foundation for directionally correct decisions, and it has to flow to everyone, not just the leadership layer.</p>
+        <p class="reveal">Most organisations mistake strategy for context. A company strategy pitched at such high altitude that almost any initiative can claim alignment with it provides cover, not context. Functions develop their own versions — commercial, supply, R&D, technology — each coherent internally, disconnected from the others. No single thread runs through the organisation.</p>
+        <p class="reveal">Context is not a dashboard. Not a strategy document. It is a living, shared understanding of where the organisation actually is — maintained continuously, owned collectively, and visible to everyone who needs to act on it.</p>
+
+        <div class="ta reveal">
+          <div class="ta-cell towards">
+            <span class="ta-label">Towards</span>
+            <p>The clarity to make confident decisions. Always knowing where you actually are.</p>
+          </div>
+          <div class="ta-cell away">
+            <span class="ta-label">Away from</span>
+            <p>Never again running blind, on gut, or on a framework that does not fit your reality.</p>
+          </div>
+        </div>
+
+        <div class="examples">
+          <p class="ex-eyebrow reveal">In practice</p>
+          <div class="ex ex-bad reveal">
+            <span class="ex-tag">When it breaks down</span>
+            <h4>The functional silo</h4>
+            <p>A global organisation runs a company strategy pitched so high that almost any initiative can claim alignment with it. Each function builds its own coherent version, disconnected from the rest. It surfaces as a recurring S&amp;OP argument between sales and supply — sales claiming ownership of the total forecast, supply claiming the baseline. Neither wrong by their own logic. But there is no shared definition of reality that predates the meeting, so nothing resolves. Every decision downstream is built on a contested foundation.</p>
+          </div>
+          <div class="ex ex-bad reveal">
+            <span class="ex-tag">When it breaks down</span>
+            <h4>The watermelon project</h4>
+            <p>A large technology programme runs for years. Status reports consistently green — budget on track, schedule on track, requirements met. But the people who have to use it are not happy. The technology team operates on its context of delivery milestones and specifications; the business on its context of commercial outcomes and user experience. The two never genuinely meet. Green on the outside, red on the inside. A thirty-million, three-year investment was eventually replaced by a fifteen-month, one-and-a-half-million rebuild — once the contexts were joined and the courage was found to change direction. The team built from that shared understanding is still operating and evolving six years later.</p>
+          </div>
+          <div class="ex ex-good reveal">
+            <span class="ex-tag">When it works</span>
+            <h4>Door number three</h4>
+            <p>Where context works, a technology leader and a business leader genuinely partner — not to manage a relationship, but to build and maintain a single view of reality neither could hold alone. The difference is rarely data or technology. It is a shared understanding of priorities: what matters most, what comes first, what the organisation is collectively willing to put last. Door number three — the option that serves the whole enterprise rather than any single function — gets considered, because the people who can see it are finally in the room.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Principle 02 — Decisive -->
+  <article class="principle">
+    <div class="p-head">
+      <div class="wrap reveal">
+        <span class="p-num">02</span>
+        <h3 class="p-name">Decisive</h3>
+        <p class="p-tag">Speed and commitment as a single, inseparable act</p>
+      </div>
+    </div>
+    <div class="p-body">
+      <div class="wrap narrow">
+        <p class="reveal">Speed without collective commitment produces fast decisions that die in implementation. Commitment without speed produces decisions that arrive too late to matter. The dynamic organisation has learned to compress the commitment process without skipping it.</p>
+        <p class="reveal">Most organisations treat speed and commitment as a trade-off. The things that build commitment — consultation, debate, bringing people along — are naturally slow. So organisations either move fast and lose people, or build consensus so slowly the window closes.</p>
+        <p class="reveal">The ones who get this right have done the work before the decision arrives. Shared context, so people are already looking at the same reality. Pre-built trust, so commitment does not start from scratch in the meeting room. Clear decision rights, so the right people are present and the wrong people are not. And psychological safety around reversal — because people commit faster when changing course later will not be called failure.</p>
+
+        <div class="ta reveal">
+          <div class="ta-cell towards">
+            <span class="ta-label">Towards</span>
+            <p>Decisions that move fast and stick. Commitment that becomes momentum.</p>
+          </div>
+          <div class="ta-cell away">
+            <span class="ta-label">Away from</span>
+            <p>Never watching a good decision die because the wrong people were in the room, or the right people were not ready.</p>
+          </div>
+        </div>
+
+        <div class="examples">
+          <p class="ex-eyebrow reveal">In practice</p>
+          <div class="ex ex-bad reveal">
+            <span class="ex-tag">When it breaks down</span>
+            <h4>The leader who never said yes</h4>
+            <p>Some leaders frame indecision as diligence. Every proposal is met with questions rather than answers; every request for a decision produces a request for more information. The people around them adapt — learning to frame conversations not as "can we do this" but as "we are going to do this unless you tell us not to." The workaround works, but at a cost: extra cycles, unnecessary stress, and a slow erosion of confidence in the more junior people caught in the middle. They were not missing anything. Indecision was the issue. But indecision rarely announces itself as such.</p>
+          </div>
+          <div class="ex ex-bad reveal">
+            <span class="ex-tag">When it breaks down</span>
+            <h4>The RFP that answered a dead question</h4>
+            <p>In the early days of automated marketing and customer data platforms, a global organisation decided to run a full procurement process. A small team travelled the world for months collecting requirements. An RFP ran for months more. The team flew around the world again, ensuring every stakeholder felt heard. The obvious choice — visible to most informed observers from day one — was eventually selected. Contract negotiation ran for months. By the time the platform went live, the original goals had dissolved and the organisational energy was spent. And while the committee was on its journey, the people closest to the need had not waited: local teams with budget autonomy had engaged agencies to fill the gap. The organisation paid twice. The process was designed to prevent a bad decision. It prevented any decision.</p>
+          </div>
+          <div class="ex ex-good reveal">
+            <span class="ex-tag">When it works</span>
+            <h4>Context shared aggressively, decision made cleanly</h4>
+            <p>A clear-eyed commercial leader identified customer experience as the right lever for growth — specifically order availability and shipping transparency for a seasonal product. The context was simple and shared without ambiguity: customers who could not see what was happening with their orders were hedging by ordering from competitors. Returns were high, trust was low. With that context established and a leader willing to commit, a small team designed and built a custom forecasting and allocation process in months. Customers gained full transparency. Order quality improved. Returns fell. The window existed, the context was clear, the decision was made — and the outcome was delivered.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Principle 03 — Transparent -->
+  <article class="principle">
+    <div class="p-head">
+      <div class="wrap reveal">
+        <span class="p-num">03</span>
+        <h3 class="p-name">Transparent</h3>
+        <p class="p-tag">Open about reality, change, and the human cost of motion</p>
+      </div>
+    </div>
+    <div class="p-body">
+      <div class="wrap narrow">
+        <p class="reveal">Change has an emotional cost that cannot be managed away with a communications plan. The person who spent three years becoming expert in the platform you have just decided to abandon does not have a skills gap. They have an identity investment, a career stake, a legitimate loss. Transparency means acknowledging that openly, giving it room, and providing real support. Suppressing it does not make it disappear — it makes it resistance.</p>
+        <p class="reveal">Transparency runs in two directions, and both are hard. Receiving decisions without understanding why — budgets cut, projects delayed, people let go — leaves people unable to explain it to themselves or to anyone else. Being read into a situation and asked to deliver a decision to those who were not — holding the full context but unable to share it — is its own particular difficulty. Both erode trust when handled poorly.</p>
+        <p class="reveal">The transparent organisation does not pretend these tensions do not exist. It gives people time to grieve when something they cared about changes, and it offers genuine acknowledgement that something of value is being lost — even when the decision is right. Everyone matters here, not just the leadership layer. The people closest to the work hold the most critical institutional knowledge and the most legitimate attachment to what is changing. Losing them emotionally is as dangerous as losing a sponsor.</p>
+
+        <div class="ta reveal">
+          <div class="ta-cell towards">
+            <span class="ta-label">Towards</span>
+            <p>A team that stays whole through change. People who bring their full capability because they feel genuinely valued.</p>
+          </div>
+          <div class="ta-cell away">
+            <span class="ta-label">Away from</span>
+            <p>The quiet attrition, the passive resistance, the institutional knowledge that walks out when people feel discarded.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Principle 04 — Motivational -->
+  <article class="principle">
+    <div class="p-head">
+      <div class="wrap reveal">
+        <span class="p-num">04</span>
+        <h3 class="p-name">Motivational</h3>
+        <p class="p-tag">Fluent in how every person moves — towards or away</p>
+      </div>
+    </div>
+    <div class="p-body">
+      <div class="wrap narrow">
+        <p class="reveal">People are not uniformly motivated. Some need to hear why something is better — the vision, the upside, the possibility ahead. Others need to know what they are being saved from — the risk, the problem, the pain being prevented. The dynamic organisation speaks both languages with equal conviction, in every communication, at every level. Leading only in one direction leaves half the organisation unmoved.</p>
+        <p class="reveal">Most change programmes pick one mode and broadcast it uniformly. The vision deck is all towards — here is the bright future, here is what we are building, here is why it is exciting. And half the room is thinking "but what is actually broken right now, and why does this fix it" — and never gets the answer it needs to commit. The dynamic organisation is bilingual. It carries the vision and the burning platform at once, and knows which to speak to which person in which moment.</p>
+        <p class="reveal">Feeling part of the solution is itself motivating. When people have enough context to understand why a decision was taken, they stop being recipients of change and start being participants in it. That shift — from managed to engaged — is what separates organisations that sustain dynamism from those that exhaust themselves trying.</p>
+
+        <div class="ta reveal">
+          <div class="ta-cell towards">
+            <span class="ta-label">Towards</span>
+            <p>A workforce genuinely energised by the direction of travel — each person hearing the version of the truth that lands for them.</p>
+          </div>
+          <div class="ta-cell away">
+            <span class="ta-label">Away from</span>
+            <p>Half the organisation never convinced, because the message only ever spoke to the other half.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- What this is not -->
+  <section class="ruled">
+    <div class="wrap narrow">
+      <p class="eyebrow reveal">Boundaries</p>
+      <h2 class="reveal">What this is not</h2>
+      <ul class="nots reveal">
+        <li><strong>Not a maturity model.</strong> There is no level five.</li>
+        <li><strong>Not a transformation methodology.</strong> There is no completion.</li>
+        <li><strong>Not a technology framework.</strong> The technology is incidental.</li>
+        <li><strong>Not a consulting product.</strong> No methodology to sell, no certification to award.</li>
+        <li><strong>Not a personal brand.</strong> The work speaks.</li>
+      </ul>
+      <p class="not-close reveal">You do not achieve Digital Dynamism. You practise it.</p>
+    </div>
+  </section>
+
+  <!-- Etymology close -->
+  <section class="close">
+    <div class="wrap narrow">
+      <p class="eyebrow reveal">Close</p>
+      <p class="reveal">Dynamic comes from the Greek <em>dynamis</em> — power, force, capability. Not a process to follow. Not a methodology to implement. A quality that comes from within and generates motion.</p>
+      <p class="punch reveal">
+        <span class="a">Agile is something you are told to be.</span>
+        <span class="b">Dynamic is something you become.</span>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="fw">Digital Dynamism</span>
+    <span class="fmeta">digitaldynamism.com &nbsp;·&nbsp; 2026</span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var header = document.querySelector('.site-header');
+    function onScroll() {
+      header.classList.toggle('scrolled', window.scrollY > 20);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    var revealEls = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      revealEls.forEach(function (el) { el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    revealEls.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>
