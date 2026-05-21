@@ -168,22 +168,23 @@
     padding: clamp(2.3rem, 5.5vw, 3.6rem) 0;
   }
   .p-head .wrap {
+    display: block;
+  }
+  .p-title-row {
     display: flex;
-    align-items: center;
-    gap: clamp(1rem, 3.4vw, 2.2rem);
+    align-items: baseline;
+    gap: 0.55em;
   }
   .p-num {
     flex-shrink: 0;
-    font-size: clamp(2.3rem, 5.6vw, 3.6rem);
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: -0.04em;
+    font-size: clamp(1.8rem, 5vw, 2.9rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
     color: rgba(236,236,242,0.22);
   }
   .p-text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+    display: block;
   }
   .p-name {
     margin: 0;
@@ -194,7 +195,7 @@
     color: var(--ink);
   }
   .p-tag {
-    margin: 0;
+    margin: 0.45rem 0 0;
     font-size: clamp(0.98rem, 2vw, 1.16rem);
     color: var(--ink-mute);
   }
@@ -395,9 +396,8 @@
   <article class="principle">
     <div class="p-head">
       <div class="wrap reveal">
-        <span class="p-num">01</span>
-        <div class="p-text"><h3 class="p-name">Contextual</h3>
-        <p class="p-tag">Continuously aware of and honest about current reality</p></div>
+        <div class="p-title-row"><span class="p-num">01</span>
+        <h3 class="p-name">Contextual</h3></div><p class="p-tag">Continuously aware of and honest about current reality</p>
       </div>
     </div>
     <div class="p-body">
@@ -443,9 +443,8 @@
   <article class="principle">
     <div class="p-head">
       <div class="wrap reveal">
-        <span class="p-num">02</span>
-        <div class="p-text"><h3 class="p-name">Decisive</h3>
-        <p class="p-tag">Speed and commitment as a single, inseparable act</p></div>
+        <div class="p-title-row"><span class="p-num">02</span>
+        <h3 class="p-name">Decisive</h3></div><p class="p-tag">Speed and commitment as a single, inseparable act</p>
       </div>
     </div>
     <div class="p-body">
@@ -491,9 +490,8 @@
   <article class="principle">
     <div class="p-head">
       <div class="wrap reveal">
-        <span class="p-num">03</span>
-        <div class="p-text"><h3 class="p-name">Transparent</h3>
-        <p class="p-tag">Open about reality, change, and the human cost of motion</p></div>
+        <div class="p-title-row"><span class="p-num">03</span>
+        <h3 class="p-name">Transparent</h3></div><p class="p-tag">Open about reality, change, and the human cost of motion</p>
       </div>
     </div>
     <div class="p-body">
@@ -520,9 +518,8 @@
   <article class="principle">
     <div class="p-head">
       <div class="wrap reveal">
-        <span class="p-num">04</span>
-        <div class="p-text"><h3 class="p-name">Motivational</h3>
-        <p class="p-tag">Fluent in how every person moves — towards or away</p></div>
+        <div class="p-title-row"><span class="p-num">04</span>
+        <h3 class="p-name">Motivational</h3></div><p class="p-tag">Fluent in how every person moves — towards or away</p>
       </div>
     </div>
     <div class="p-body">
