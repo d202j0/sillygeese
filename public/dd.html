@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Digital Dynamism — A framework for organisations in permanent motion</title>
-<meta name="description" content="Digital Dynamism is a framework for organisations in permanent motion — digital capability as a disposition, not a destination. Four principles: Contextual, Decisive, Transparent, Motivational.">
+<title>Digital Dynamism — For the Enterprise in Permanent Motion</title>
+<meta name="description" content="Digital Dynamism — for the Enterprise in Permanent Motion. Digital capability as a disposition, not a destination. Four principles: Contextual, Decisive, Transparent, Motivational.">
 <meta property="og:title" content="Digital Dynamism">
-<meta property="og:description" content="A framework for organisations in permanent motion. Digital capability is not a destination you reach — it is a disposition you continuously hold.">
+<meta property="og:description" content="For the Enterprise in Permanent Motion. Digital capability is not a destination you reach — it is a disposition you continuously hold.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://digitaldynamism.com">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Digital Dynamism">
-<meta name="twitter:description" content="A framework for organisations in permanent motion. Digital capability is not a destination you reach — it is a disposition you continuously hold.">
+<meta name="twitter:description" content="For the Enterprise in Permanent Motion. Digital capability is not a destination you reach — it is a disposition you continuously hold.">
 <style>
   :root {
     --bg: #1A1A2E;
@@ -161,46 +161,84 @@
   /* ---- Principles ---- */
   .principles-intro p:last-of-type { color: var(--ink); }
 
-  .principle { border-top: 1px solid var(--line); }
+  /* ---- Accordion ---- */
+  .principles-accordion {
+    border-top: 1px solid var(--line);
+  }
 
-  .p-head {
-    background: var(--panel);
-    padding: clamp(2.3rem, 5.5vw, 3.6rem) 0;
+  .acc-item {
+    border-bottom: 1px solid var(--line);
   }
-  .p-head .wrap {
-    display: block;
-  }
-  .p-title-row {
+
+  .acc-trigger {
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: clamp(1.6rem, 4vw, 2.4rem) 0;
     display: flex;
     align-items: baseline;
-    gap: 0.55em;
+    gap: 0.6em;
+    text-align: left;
+    transition: background .2s ease;
   }
-  .p-num {
+  .acc-trigger:hover { background: rgba(255,255,255,0.02); }
+
+  .acc-num {
     flex-shrink: 0;
-    font-size: clamp(1.8rem, 5vw, 2.9rem);
+    font-size: clamp(1.5rem, 3.8vw, 2.2rem);
     font-weight: 600;
     line-height: 1.05;
     letter-spacing: -0.02em;
     color: rgba(236,236,242,0.22);
+    transition: color .2s ease;
   }
-  .p-text {
+  .acc-item.open .acc-num { color: rgba(236,236,242,0.45); }
+
+  .acc-header {
+    flex: 1;
+  }
+  .acc-name {
     display: block;
-  }
-  .p-name {
-    margin: 0;
-    font-size: clamp(1.8rem, 5vw, 2.9rem);
+    font-size: clamp(1.5rem, 3.8vw, 2.2rem);
+    font-weight: 600;
     line-height: 1.05;
     letter-spacing: -0.02em;
-    font-weight: 600;
-    color: var(--ink);
-  }
-  .p-tag {
-    margin: 0.45rem 0 0;
-    font-size: clamp(0.98rem, 2vw, 1.16rem);
     color: var(--ink-mute);
+    transition: color .2s ease;
   }
-  .p-body {
-    padding: clamp(2.6rem, 6vw, 4rem) 0 clamp(3.4rem, 8vw, 5rem);
+  .acc-item.open .acc-name { color: var(--ink); }
+
+  .acc-tag {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+    color: var(--ink-mute);
+    opacity: 0.7;
+  }
+
+  .acc-arrow {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: var(--ink-mute);
+    transition: transform .3s ease;
+  }
+  .acc-item.open .acc-arrow { transform: rotate(180deg); }
+
+  .acc-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .35s ease;
+  }
+  .acc-item.open .acc-body { grid-template-rows: 1fr; }
+
+  .acc-inner {
+    overflow: hidden;
+  }
+
+  .acc-content {
+    padding-bottom: clamp(2.6rem, 6vw, 4rem);
   }
 
   /* towards / away */
@@ -345,7 +383,7 @@
   <!-- Title / premise -->
   <section class="ruled">
     <div class="wrap narrow">
-      <p class="eyebrow reveal">A framework for organisations in permanent motion</p>
+      <p class="eyebrow reveal">For the Enterprise in Permanent Motion</p>
       <h2 class="reveal">Digital Dynamism</h2>
       <p class="lead reveal">Digital transformation has no endpoint. There is no level five, no completion date, no moment of arrival. Digital capability is not something an organisation achieves — it is something it continuously is. A disposition. The capacity to keep moving well.</p>
     </div>
@@ -365,10 +403,10 @@
   <section class="ruled">
     <div class="wrap narrow">
       <p class="eyebrow reveal">Why now</p>
-      <h2 class="reveal">AI is the proof, not the framework</h2>
+      <h2 class="reveal">AI is the proof, not the destination</h2>
       <p class="reveal">The organisations that will navigate AI successfully are not the ones with the best models or the biggest budgets. They are the ones already practising Digital Dynamism — because AI does not reward those who plan for it. It rewards those already capable of moving with it.</p>
       <p class="reveal">The borrowed operating models will not hold. Waterfall governance applied to weekly capability shifts. Transformation programmes with completion dates applied to something that never completes. Consensus processes too slow for windows that close in months.</p>
-      <p class="reveal">AI is not a problem to solve. It is the current and most urgent proof that Digital Dynamism is not optional. But it is only the context. The framework predates AI and will outlast whatever comes after it. The principles hold regardless of era.</p>
+      <p class="reveal">AI is not a problem to solve. It is the current and most urgent proof that Digital Dynamism is not optional. But it is only the context. This thinking predates AI and will outlast whatever comes after it. The principles hold regardless of era.</p>
     </div>
   </section>
 
@@ -392,155 +430,177 @@
     </div>
   </section>
 
-  <!-- Principle 01 — Contextual -->
-  <article class="principle">
-    <div class="p-head">
-      <div class="wrap reveal">
-        <div class="p-title-row"><span class="p-num">01</span>
-        <h3 class="p-name">Contextual</h3></div><p class="p-tag">Continuously aware of and honest about current reality</p>
-      </div>
-    </div>
-    <div class="p-body">
-      <div class="wrap narrow">
-        <p class="reveal">Without honest, shared visibility into where an organisation actually is — not where the last status report suggested, not where the roadmap assumed it would be — every decision runs on gut or on a borrowed framework. Neither serves the organisation. Context is the only reliable foundation for directionally correct decisions, and it has to flow to everyone, not just the leadership layer.</p>
-        <p class="reveal">Most organisations mistake strategy for context. A company strategy pitched at such high altitude that almost any initiative can claim alignment with it provides cover, not context. Functions develop their own versions — commercial, supply, R&D, technology — each coherent internally, disconnected from the others. No single thread runs through the organisation.</p>
-        <p class="reveal">Context is not a dashboard. Not a strategy document. It is a living, shared understanding of where the organisation actually is — maintained continuously, owned collectively, and visible to everyone who needs to act on it.</p>
+  <!-- Principles — Accordion -->
+  <section class="principles-accordion">
+    <div class="wrap">
+      <!-- 01 Contextual -->
+      <div class="acc-item">
+        <button class="acc-trigger" aria-expanded="false" aria-controls="acc-panel-01">
+          <span class="acc-num">01</span>
+          <span class="acc-header">
+            <span class="acc-name">Contextual</span>
+            <span class="acc-tag">Continuously aware of and honest about current reality</span>
+          </span>
+          <svg class="acc-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="5 8 10 13 15 8"/></svg>
+        </button>
+        <div class="acc-body" id="acc-panel-01">
+          <div class="acc-inner">
+            <div class="acc-content narrow">
+          <p>Without honest, shared visibility into where an organisation actually is — not where the last status report suggested, not where the roadmap assumed it would be — every decision runs on gut or on a borrowed instinct. Neither serves the organisation. Context is the only reliable foundation for directionally correct decisions, and it has to flow to everyone, not just the leadership layer.</p>
+          <p>Most organisations mistake strategy for context. A company strategy pitched at such high altitude that almost any initiative can claim alignment with it provides cover, not context. Functions develop their own versions — commercial, supply, R&amp;D, technology — each coherent internally, disconnected from the others. No single thread runs through the organisation.</p>
+          <p>Context is not a dashboard. Not a strategy document. It is a living, shared understanding of where the organisation actually is — maintained continuously, owned collectively, and visible to everyone who needs to act on it.</p>
 
-        <div class="ta reveal">
-          <div class="ta-cell towards">
-            <span class="ta-label">Towards</span>
-            <p>The clarity to make confident decisions. Always knowing where you actually are.</p>
+          <div class="ta">
+            <div class="ta-cell towards">
+              <span class="ta-label">Towards</span>
+              <p>The clarity to make confident decisions. Always knowing where you actually are.</p>
+            </div>
+            <div class="ta-cell away">
+              <span class="ta-label">Away from</span>
+              <p>Never again running blind, on gut, or on an instinct that does not fit your reality.</p>
+            </div>
           </div>
-          <div class="ta-cell away">
-            <span class="ta-label">Away from</span>
-            <p>Never again running blind, on gut, or on a framework that does not fit your reality.</p>
-          </div>
-        </div>
 
-        <div class="examples">
-          <p class="ex-eyebrow reveal">In practice</p>
-          <div class="ex ex-bad reveal">
-            <span class="ex-tag">When it breaks down</span>
-            <h4>The functional silo</h4>
-            <p>A global organisation runs a company strategy pitched so high that almost any initiative can claim alignment with it. Each function builds its own coherent version, disconnected from the rest. It surfaces as a recurring S&amp;OP argument between sales and supply — sales claiming ownership of the total forecast, supply claiming the baseline. Neither wrong by their own logic. But there is no shared definition of reality that predates the meeting, so nothing resolves. Every decision downstream is built on a contested foundation.</p>
+          <div class="examples">
+            <p class="ex-eyebrow">In practice</p>
+            <div class="ex ex-bad">
+              <span class="ex-tag">When it breaks down</span>
+              <h4>The functional silo</h4>
+              <p>A global organisation runs a company strategy pitched so high that almost any initiative can claim alignment with it. Each function builds its own coherent version, disconnected from the rest. It surfaces as a recurring S&amp;OP argument between sales and supply — sales claiming ownership of the total forecast, supply claiming the baseline. Neither wrong by their own logic. But there is no shared definition of reality that predates the meeting, so nothing resolves. Every decision downstream is built on a contested foundation.</p>
+            </div>
+            <div class="ex ex-bad">
+              <span class="ex-tag">When it breaks down</span>
+              <h4>The watermelon project</h4>
+              <p>A large technology programme runs for years. Status reports consistently green — budget on track, schedule on track, requirements met. But the people who have to use it are not happy. The technology team operates on its context of delivery milestones and specifications; the business on its context of commercial outcomes and user experience. The two never genuinely meet. Green on the outside, red on the inside. A thirty-million, three-year investment was eventually replaced by a fifteen-month, one-and-a-half-million rebuild — once the contexts were joined and the courage was found to change direction. The team built from that shared understanding is still operating and evolving six years later.</p>
+            </div>
+            <div class="ex ex-good">
+              <span class="ex-tag">When it works</span>
+              <h4>Door number three</h4>
+              <p>Where context works, a technology leader and a business leader genuinely partner — not to manage a relationship, but to build and maintain a single view of reality neither could hold alone. The difference is rarely data or technology. It is a shared understanding of priorities: what matters most, what comes first, what the organisation is collectively willing to put last. Door number three — the option that serves the whole enterprise rather than any single function — gets considered, because the people who can see it are finally in the room.</p>
+            </div>
           </div>
-          <div class="ex ex-bad reveal">
-            <span class="ex-tag">When it breaks down</span>
-            <h4>The watermelon project</h4>
-            <p>A large technology programme runs for years. Status reports consistently green — budget on track, schedule on track, requirements met. But the people who have to use it are not happy. The technology team operates on its context of delivery milestones and specifications; the business on its context of commercial outcomes and user experience. The two never genuinely meet. Green on the outside, red on the inside. A thirty-million, three-year investment was eventually replaced by a fifteen-month, one-and-a-half-million rebuild — once the contexts were joined and the courage was found to change direction. The team built from that shared understanding is still operating and evolving six years later.</p>
-          </div>
-          <div class="ex ex-good reveal">
-            <span class="ex-tag">When it works</span>
-            <h4>Door number three</h4>
-            <p>Where context works, a technology leader and a business leader genuinely partner — not to manage a relationship, but to build and maintain a single view of reality neither could hold alone. The difference is rarely data or technology. It is a shared understanding of priorities: what matters most, what comes first, what the organisation is collectively willing to put last. Door number three — the option that serves the whole enterprise rather than any single function — gets considered, because the people who can see it are finally in the room.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </article>
-
-  <!-- Principle 02 — Decisive -->
-  <article class="principle">
-    <div class="p-head">
-      <div class="wrap reveal">
-        <div class="p-title-row"><span class="p-num">02</span>
-        <h3 class="p-name">Decisive</h3></div><p class="p-tag">Speed and commitment as a single, inseparable act</p>
-      </div>
-    </div>
-    <div class="p-body">
-      <div class="wrap narrow">
-        <p class="reveal">Speed without collective commitment produces fast decisions that die in implementation. Commitment without speed produces decisions that arrive too late to matter. The dynamic organisation has learned to compress the commitment process without skipping it.</p>
-        <p class="reveal">Most organisations treat speed and commitment as a trade-off. The things that build commitment — consultation, debate, bringing people along — are naturally slow. So organisations either move fast and lose people, or build consensus so slowly the window closes.</p>
-        <p class="reveal">The ones who get this right have done the work before the decision arrives. Shared context, so people are already looking at the same reality. Pre-built trust, so commitment does not start from scratch in the meeting room. Clear decision rights, so the right people are present and the wrong people are not. And psychological safety around reversal — because people commit faster when changing course later will not be called failure.</p>
-
-        <div class="ta reveal">
-          <div class="ta-cell towards">
-            <span class="ta-label">Towards</span>
-            <p>Decisions that move fast and stick. Commitment that becomes momentum.</p>
-          </div>
-          <div class="ta-cell away">
-            <span class="ta-label">Away from</span>
-            <p>Never watching a good decision die because the wrong people were in the room, or the right people were not ready.</p>
-          </div>
-        </div>
-
-        <div class="examples">
-          <p class="ex-eyebrow reveal">In practice</p>
-          <div class="ex ex-bad reveal">
-            <span class="ex-tag">When it breaks down</span>
-            <h4>The leader who never said yes</h4>
-            <p>Some leaders frame indecision as diligence. Every proposal is met with questions rather than answers; every request for a decision produces a request for more information. The people around them adapt — learning to frame conversations not as "can we do this" but as "we are going to do this unless you tell us not to." The workaround works, but at a cost: extra cycles, unnecessary stress, and a slow erosion of confidence in the more junior people caught in the middle. They were not missing anything. Indecision was the issue. But indecision rarely announces itself as such.</p>
-          </div>
-          <div class="ex ex-bad reveal">
-            <span class="ex-tag">When it breaks down</span>
-            <h4>The RFP that answered a dead question</h4>
-            <p>In the early days of automated marketing and customer data platforms, a global organisation decided to run a full procurement process. A small team travelled the world for months collecting requirements. An RFP ran for months more. The team flew around the world again, ensuring every stakeholder felt heard. The obvious choice — visible to most informed observers from day one — was eventually selected. Contract negotiation ran for months. By the time the platform went live, the original goals had dissolved and the organisational energy was spent. And while the committee was on its journey, the people closest to the need had not waited: local teams with budget autonomy had engaged agencies to fill the gap. The organisation paid twice. The process was designed to prevent a bad decision. It prevented any decision.</p>
-          </div>
-          <div class="ex ex-good reveal">
-            <span class="ex-tag">When it works</span>
-            <h4>Context shared aggressively, decision made cleanly</h4>
-            <p>A clear-eyed commercial leader identified customer experience as the right lever for growth — specifically order availability and shipping transparency for a seasonal product. The context was simple and shared without ambiguity: customers who could not see what was happening with their orders were hedging by ordering from competitors. Returns were high, trust was low. With that context established and a leader willing to commit, a small team designed and built a custom forecasting and allocation process in months. Customers gained full transparency. Order quality improved. Returns fell. The window existed, the context was clear, the decision was made — and the outcome was delivered.</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </article>
 
-  <!-- Principle 03 — Transparent -->
-  <article class="principle">
-    <div class="p-head">
-      <div class="wrap reveal">
-        <div class="p-title-row"><span class="p-num">03</span>
-        <h3 class="p-name">Transparent</h3></div><p class="p-tag">Open about reality, change, and the human cost of motion</p>
-      </div>
-    </div>
-    <div class="p-body">
-      <div class="wrap narrow">
-        <p class="reveal">Change has an emotional cost that cannot be managed away with a communications plan. The person who spent three years becoming expert in the platform you have just decided to abandon does not have a skills gap. They have an identity investment, a career stake, a legitimate loss. Transparency means acknowledging that openly, giving it room, and providing real support. Suppressing it does not make it disappear — it makes it resistance.</p>
-        <p class="reveal">Transparency runs in two directions, and both are hard. Receiving decisions without understanding why — budgets cut, projects delayed, people let go — leaves people unable to explain it to themselves or to anyone else. Being read into a situation and asked to deliver a decision to those who were not — holding the full context but unable to share it — is its own particular difficulty. Both erode trust when handled poorly.</p>
-        <p class="reveal">The transparent organisation does not pretend these tensions do not exist. It gives people time to grieve when something they cared about changes, and it offers genuine acknowledgement that something of value is being lost — even when the decision is right. Everyone matters here, not just the leadership layer. The people closest to the work hold the most critical institutional knowledge and the most legitimate attachment to what is changing. Losing them emotionally is as dangerous as losing a sponsor.</p>
+      <!-- 02 Decisive -->
+      <div class="acc-item">
+        <button class="acc-trigger" aria-expanded="false" aria-controls="acc-panel-02">
+          <span class="acc-num">02</span>
+          <span class="acc-header">
+            <span class="acc-name">Decisive</span>
+            <span class="acc-tag">Speed and commitment as a single, inseparable act</span>
+          </span>
+          <svg class="acc-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="5 8 10 13 15 8"/></svg>
+        </button>
+        <div class="acc-body" id="acc-panel-02">
+          <div class="acc-inner">
+            <div class="acc-content narrow">
+          <p>Speed without collective commitment produces fast decisions that die in implementation. Commitment without speed produces decisions that arrive too late to matter. The dynamic organisation has learned to compress the commitment process without skipping it.</p>
+          <p>Most organisations treat speed and commitment as a trade-off. The things that build commitment — consultation, debate, bringing people along — are naturally slow. So organisations either move fast and lose people, or build consensus so slowly the window closes.</p>
+          <p>The ones who get this right have done the work before the decision arrives. Shared context, so people are already looking at the same reality. Pre-built trust, so commitment does not start from scratch in the meeting room. Clear decision rights, so the right people are present and the wrong people are not. And psychological safety around reversal — because people commit faster when changing course later will not be called failure.</p>
 
-        <div class="ta reveal">
-          <div class="ta-cell towards">
-            <span class="ta-label">Towards</span>
-            <p>A team that stays whole through change. People who bring their full capability because they feel genuinely valued.</p>
+          <div class="ta">
+            <div class="ta-cell towards">
+              <span class="ta-label">Towards</span>
+              <p>Decisions that move fast and stick. Commitment that becomes momentum.</p>
+            </div>
+            <div class="ta-cell away">
+              <span class="ta-label">Away from</span>
+              <p>Never watching a good decision die because the wrong people were in the room, or the right people were not ready.</p>
+            </div>
           </div>
-          <div class="ta-cell away">
-            <span class="ta-label">Away from</span>
-            <p>The quiet attrition, the passive resistance, the institutional knowledge that walks out when people feel discarded.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </article>
 
-  <!-- Principle 04 — Motivational -->
-  <article class="principle">
-    <div class="p-head">
-      <div class="wrap reveal">
-        <div class="p-title-row"><span class="p-num">04</span>
-        <h3 class="p-name">Motivational</h3></div><p class="p-tag">Fluent in how every person moves — towards or away</p>
-      </div>
-    </div>
-    <div class="p-body">
-      <div class="wrap narrow">
-        <p class="reveal">People are not uniformly motivated. Some need to hear why something is better — the vision, the upside, the possibility ahead. Others need to know what they are being saved from — the risk, the problem, the pain being prevented. The dynamic organisation speaks both languages with equal conviction, in every communication, at every level. Leading only in one direction leaves half the organisation unmoved.</p>
-        <p class="reveal">Most change programmes pick one mode and broadcast it uniformly. The vision deck is all towards — here is the bright future, here is what we are building, here is why it is exciting. And half the room is thinking "but what is actually broken right now, and why does this fix it" — and never gets the answer it needs to commit. The dynamic organisation is bilingual. It carries the vision and the burning platform at once, and knows which to speak to which person in which moment.</p>
-        <p class="reveal">Feeling part of the solution is itself motivating. When people have enough context to understand why a decision was taken, they stop being recipients of change and start being participants in it. That shift — from managed to engaged — is what separates organisations that sustain dynamism from those that exhaust themselves trying.</p>
-
-        <div class="ta reveal">
-          <div class="ta-cell towards">
-            <span class="ta-label">Towards</span>
-            <p>A workforce genuinely energised by the direction of travel — each person hearing the version of the truth that lands for them.</p>
+          <div class="examples">
+            <p class="ex-eyebrow">In practice</p>
+            <div class="ex ex-bad">
+              <span class="ex-tag">When it breaks down</span>
+              <h4>The leader who never said yes</h4>
+              <p>Some leaders frame indecision as diligence. Every proposal is met with questions rather than answers; every request for a decision produces a request for more information. The people around them adapt — learning to frame conversations not as "can we do this" but as "we are going to do this unless you tell us not to." The workaround works, but at a cost: extra cycles, unnecessary stress, and a slow erosion of confidence in the more junior people caught in the middle. They were not missing anything. Indecision was the issue. But indecision rarely announces itself as such.</p>
+            </div>
+            <div class="ex ex-bad">
+              <span class="ex-tag">When it breaks down</span>
+              <h4>The RFP that answered a dead question</h4>
+              <p>In the early days of automated marketing and customer data platforms, a global organisation decided to run a full procurement process. A small team travelled the world for months collecting requirements. An RFP ran for months more. The team flew around the world again, ensuring every stakeholder felt heard. The obvious choice — visible to most informed observers from day one — was eventually selected. Contract negotiation ran for months. By the time the platform went live, the original goals had dissolved and the organisational energy was spent. And while the committee was on its journey, the people closest to the need had not waited: local teams with budget autonomy had engaged agencies to fill the gap. The organisation paid twice. The process was designed to prevent a bad decision. It prevented any decision.</p>
+            </div>
+            <div class="ex ex-good">
+              <span class="ex-tag">When it works</span>
+              <h4>Context shared aggressively, decision made cleanly</h4>
+              <p>A clear-eyed commercial leader identified customer experience as the right lever for growth — specifically order availability and shipping transparency for a seasonal product. The context was simple and shared without ambiguity: customers who could not see what was happening with their orders were hedging by ordering from competitors. Returns were high, trust was low. With that context established and a leader willing to commit, a small team designed and built a custom forecasting and allocation process in months. Customers gained full transparency. Order quality improved. Returns fell. The window existed, the context was clear, the decision was made — and the outcome was delivered.</p>
+            </div>
           </div>
-          <div class="ta-cell away">
-            <span class="ta-label">Away from</span>
-            <p>Half the organisation never convinced, because the message only ever spoke to the other half.</p>
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- 03 Transparent -->
+      <div class="acc-item">
+        <button class="acc-trigger" aria-expanded="false" aria-controls="acc-panel-03">
+          <span class="acc-num">03</span>
+          <span class="acc-header">
+            <span class="acc-name">Transparent</span>
+            <span class="acc-tag">Open about reality, change, and the human cost of motion</span>
+          </span>
+          <svg class="acc-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="5 8 10 13 15 8"/></svg>
+        </button>
+        <div class="acc-body" id="acc-panel-03">
+          <div class="acc-inner">
+            <div class="acc-content narrow">
+          <p>Change has an emotional cost that cannot be managed away with a communications plan. The person who spent three years becoming expert in the platform you have just decided to abandon does not have a skills gap. They have an identity investment, a career stake, a legitimate loss. Transparency means acknowledging that openly, giving it room, and providing real support. Suppressing it does not make it disappear — it makes it resistance.</p>
+          <p>Transparency runs in two directions, and both are hard. Receiving decisions without understanding why — budgets cut, projects delayed, people let go — leaves people unable to explain it to themselves or to anyone else. Being read into a situation and asked to deliver a decision to those who were not — holding the full context but unable to share it — is its own particular difficulty. Both erode trust when handled poorly.</p>
+          <p>The transparent organisation does not pretend these tensions do not exist. It gives people time to grieve when something they cared about changes, and it offers genuine acknowledgement that something of value is being lost — even when the decision is right. Everyone matters here, not just the leadership layer. The people closest to the work hold the most critical institutional knowledge and the most legitimate attachment to what is changing. Losing them emotionally is as dangerous as losing a sponsor.</p>
+
+          <div class="ta">
+            <div class="ta-cell towards">
+              <span class="ta-label">Towards</span>
+              <p>A team that stays whole through change. People who bring their full capability because they feel genuinely valued.</p>
+            </div>
+            <div class="ta-cell away">
+              <span class="ta-label">Away from</span>
+              <p>The quiet attrition, the passive resistance, the institutional knowledge that walks out when people feel discarded.</p>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 Motivational -->
+      <div class="acc-item">
+        <button class="acc-trigger" aria-expanded="false" aria-controls="acc-panel-04">
+          <span class="acc-num">04</span>
+          <span class="acc-header">
+            <span class="acc-name">Motivational</span>
+            <span class="acc-tag">Fluent in how every person moves — towards or away</span>
+          </span>
+          <svg class="acc-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="5 8 10 13 15 8"/></svg>
+        </button>
+        <div class="acc-body" id="acc-panel-04">
+          <div class="acc-inner">
+            <div class="acc-content narrow">
+          <p>People are not uniformly motivated. Some need to hear why something is better — the vision, the upside, the possibility ahead. Others need to know what they are being saved from — the risk, the problem, the pain being prevented. The dynamic organisation speaks both languages with equal conviction, in every communication, at every level. Leading only in one direction leaves half the organisation unmoved.</p>
+          <p>Most change programmes pick one mode and broadcast it uniformly. The vision deck is all towards — here is the bright future, here is what we are building, here is why it is exciting. And half the room is thinking "but what is actually broken right now, and why does this fix it" — and never gets the answer it needs to commit. The dynamic organisation is bilingual. It carries the vision and the burning platform at once, and knows which to speak to which person in which moment.</p>
+          <p>Feeling part of the solution is itself motivating. When people have enough context to understand why a decision was taken, they stop being recipients of change and start being participants in it. That shift — from managed to engaged — is what separates organisations that sustain dynamism from those that exhaust themselves trying.</p>
+
+          <div class="ta">
+            <div class="ta-cell towards">
+              <span class="ta-label">Towards</span>
+              <p>A workforce genuinely energised by the direction of travel — each person hearing the version of the truth that lands for them.</p>
+            </div>
+            <div class="ta-cell away">
+              <span class="ta-label">Away from</span>
+              <p>Half the organisation never convinced, because the message only ever spoke to the other half.</p>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
-  </article>
+  </section>
 
   <!-- What this is not -->
   <section class="ruled">
@@ -581,6 +641,7 @@
 
 <script>
   (function () {
+    // Scroll header
     var header = document.querySelector('.site-header');
     function onScroll() {
       header.classList.toggle('scrolled', window.scrollY > 20);
@@ -588,20 +649,32 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
+    // Reveal on scroll
     var revealEls = document.querySelectorAll('.reveal');
-    if (!('IntersectionObserver' in window)) {
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      revealEls.forEach(function (el) { io.observe(el); });
+    } else {
       revealEls.forEach(function (el) { el.classList.add('in'); });
-      return;
     }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in');
-          io.unobserve(entry.target);
-        }
+
+    // Accordion
+    var accItems = document.querySelectorAll('.acc-item');
+    accItems.forEach(function (item) {
+      var trigger = item.querySelector('.acc-trigger');
+      trigger.addEventListener('click', function () {
+        var isOpen = item.classList.contains('open');
+        item.classList.toggle('open', !isOpen);
+        trigger.setAttribute('aria-expanded', String(!isOpen));
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    revealEls.forEach(function (el) { io.observe(el); });
+    });
   })();
 </script>
 
