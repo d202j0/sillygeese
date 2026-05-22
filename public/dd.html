@@ -177,12 +177,17 @@
     background: none;
     border: none;
     cursor: pointer;
-    padding: clamp(1.6rem, 4vw, 2.4rem) 0;
+    /* OPTION-B: full-width trigger, text constrained inside */
+    padding: clamp(1.6rem, 4vw, 2.4rem) calc((100% - 680px) / 2);
+    /* OPTION-A: swap to this instead — padding: clamp(1.6rem, 4vw, 2.4rem) 0; and add max-width: 680px; margin: 0 auto; */
     display: flex;
     align-items: baseline;
     gap: 0.6em;
     text-align: left;
     transition: background .2s ease;
+  }
+  @media (max-width: 728px) {
+    .acc-trigger { padding-left: 24px; padding-right: 24px; }
   }
   .acc-trigger:hover { background: rgba(255,255,255,0.02); }
 
